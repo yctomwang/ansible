@@ -3,5 +3,5 @@ argument_specs:
   main:
     options:
       varg:
-        required: true
+        required: false
         type: str
