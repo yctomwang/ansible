@@ -391,6 +391,8 @@ class Role(Base, Conditional, Taggable, CollectionSearch, Delegatable):
         }
 
         # Conditionally add the 'tags' key based on the condition
+        print("fuck")
+        print(self._play.tags)
         if not self._play.tags:
             result['tags'] = ['always']
 
