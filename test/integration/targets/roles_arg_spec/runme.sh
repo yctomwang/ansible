@@ -32,4 +32,4 @@ export JUNIT_OUTPUT_DIR="${OUTPUT_DIR}"
 #ansible-playbook test_tags.yml -i ../../inventory "$@" --tags bar | grep "a : Validating arguments against arg spec 'main' - Main entry point for role A."
 ##todo: add an echo statement to see what is getting passed in as $@
 
-ansible-playbook test_82505.yml -i ../../inventory "$@" -t g -CD
+ansible-playbook test_82505.yml -i ../../inventory "$@" -t f -CD
