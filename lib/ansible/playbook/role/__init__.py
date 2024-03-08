@@ -358,10 +358,26 @@ class Role(Base, Conditional, Taggable, CollectionSearch, Delegatable):
         if 'short_description' in argument_spec:
             task_name = task_name + ' - ' + argument_spec['short_description']
 
-        return {
+        # return {
+        #     'action': {
+        #         'module': 'ansible.builtin.validate_argument_spec',
+        #         # Pass only the 'options' portion of the arg spec to the module.
+        #         'argument_spec': argument_spec.get('options', {}),
+        #         'provided_arguments': self._role_params,
+        #         'validate_args_context': {
+        #             'type': 'role',
+        #             'name': self._role_name,
+        #             'argument_spec_name': entrypoint_name,
+        #             'path': self._role_path
+        #         },
+        #     },
+        #     'name': task_name,
+        #     'tags': ['always'],
+        # }
+
+        result = {
             'action': {
                 'module': 'ansible.builtin.validate_argument_spec',
-                # Pass only the 'options' portion of the arg spec to the module.
                 'argument_spec': argument_spec.get('options', {}),
                 'provided_arguments': self._role_params,
                 'validate_args_context': {
@@ -372,8 +388,13 @@ class Role(Base, Conditional, Taggable, CollectionSearch, Delegatable):
                 },
             },
             'name': task_name,
-            'tags': ['always'],
         }
+
+        # Conditionally add the 'tags' key based on the condition
+        if not self._play.tags:
+            result['tags'] = ['always']
+
+        return result
 
     def _load_role_yaml(self, subdir, main=None, allow_dir=False):
         '''
