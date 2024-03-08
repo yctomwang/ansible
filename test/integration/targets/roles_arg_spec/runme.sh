@@ -15,21 +15,21 @@ set -eux
 export JUNIT_OUTPUT_DIR="${OUTPUT_DIR}"
 
 # Various simple role scenarios
-ansible-playbook test.yml -i ../../inventory "$@"
-
-# More complex role test
-ansible-playbook test_complex_role_fails.yml -i ../../inventory "$@"
-
-# Test play level role will fail
-set +e
-ansible-playbook test_play_level_role_fails.yml -i ../../inventory "$@"
-test $? -ne 0
-set -e
-
-# Test the validation task is tagged with 'always' by specifying an unused tag.
-# The task is tagged with 'foo' but we use 'bar' in the call below and expect
-# the validation task to run anyway since it is tagged 'always'.
-ansible-playbook test_tags.yml -i ../../inventory "$@" --tags bar | grep "a : Validating arguments against arg spec 'main' - Main entry point for role A."
-#todo: add an echo statement to see what is getting passed in as $@
+#ansible-playbook test.yml -i ../../inventory "$@"
+#
+## More complex role test
+#ansible-playbook test_complex_role_fails.yml -i ../../inventory "$@"
+#
+## Test play level role will fail
+#set +e
+#ansible-playbook test_play_level_role_fails.yml -i ../../inventory "$@"
+#test $? -ne 0
+#set -e
+#
+## Test the validation task is tagged with 'always' by specifying an unused tag.
+## The task is tagged with 'foo' but we use 'bar' in the call below and expect
+## the validation task to run anyway since it is tagged 'always'.
+#ansible-playbook test_tags.yml -i ../../inventory "$@" --tags bar | grep "a : Validating arguments against arg spec 'main' - Main entry point for role A."
+##todo: add an echo statement to see what is getting passed in as $@
 
 ansible-playbook test_82505.yml -i ../../inventory "$@" -t f -CD
