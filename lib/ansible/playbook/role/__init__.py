@@ -392,7 +392,7 @@ class Role(Base, Conditional, Taggable, CollectionSearch, Delegatable):
 
         # Conditionally add the 'tags' key based on the condition
         if not self._play.tags:
-            result['tags'] = ['always']
+            result['tags'] = ['randomcrap']
 
         return result
 
