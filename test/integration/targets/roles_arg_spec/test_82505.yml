@@ -1,0 +1,13 @@
+- name: Test playbook for 82505
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Import role f with tags
+      import_role:
+        name: f
+      tags: [agents, f]
+
+    - name: Import role g with tags
+      import_role:
+        name: g
+      tags: [agents, g]
