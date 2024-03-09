@@ -901,6 +901,7 @@ def docker_image_inspect(args: CommonConfig, image: str, always: bool = False) -
         inspect_cache = docker_image_inspect.cache = {}  # type: ignore[attr-defined]
 
     if inspect_result := inspect_cache.get(image):
+        print("trigger you ")
         return inspect_result
 
     try:
@@ -919,6 +920,7 @@ def docker_image_inspect(args: CommonConfig, image: str, always: bool = False) -
     if len(items) == 1:
         inspect_result = DockerImageInspect(args, items[0])
         inspect_cache[image] = inspect_result
+        print("trigger")
         return inspect_result
 
     print("IT GOT TRIGGERED HERE")
