@@ -891,6 +891,7 @@ def docker_image_inspect(args: CommonConfig, image: str, always: bool = False) -
     """
     print("________Thi is image")
     print(image)
+    print(args)
     print("screw this")
 
     inspect_cache: dict[str, DockerImageInspect]
