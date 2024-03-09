@@ -917,6 +917,7 @@ def docker_image_inspect(args: CommonConfig, image: str, always: bool = False) -
         inspect_cache[image] = inspect_result
         return inspect_result
 
+    print("IT GOT TRIGGERED HERE")
     return None
 
 
