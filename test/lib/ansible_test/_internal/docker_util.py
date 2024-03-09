@@ -889,6 +889,7 @@ def docker_image_inspect(args: CommonConfig, image: str, always: bool = False) -
     """
     Return the results of `docker image inspect` for the specified image or None if the image does not exist.
     """
+    print(image)
     inspect_cache: dict[str, DockerImageInspect]
 
     try:
@@ -918,7 +919,7 @@ def docker_image_inspect(args: CommonConfig, image: str, always: bool = False) -
         return inspect_result
 
     print("IT GOT TRIGGERED HERE")
-    print(image)
+
     return None
 
 
