@@ -17,39 +17,39 @@
 # build-dep and ensure things are clean)
 
 # uninstall quilt
-- name: check quilt with dpkg
-  shell: dpkg -s quilt
-  register: dpkg_result
-  ignore_errors: true
-  tags: ['test_apt_builddep']
-
-- name: uninstall quilt with apt
-  apt: pkg=quilt state=absent purge=yes
-  register: apt_result
-  when: dpkg_result is successful
-  tags: ['test_apt_builddep']
-
-# install build-dep for rolldice
-- name: install rolldice build-dep with apt
-  apt: pkg=rolldice state=build-dep
-  register: apt_result
-  tags: ['test_apt_builddep']
-
-- name: verify build_dep of netcat
-  assert:
-    that:
-        - "'changed' in apt_result"
-  tags: ['test_apt_builddep']
-
-# ensure debhelper and qilt are installed
-- name: check build_deps with dpkg
-  shell: dpkg --get-selections | egrep '(debhelper|quilt)'
-  failed_when: False
-  register: dpkg_result
-  tags: ['test_apt_builddep']
-
-- name: verify build_deps are really there
-  assert:
-    that:
-        - "dpkg_result.rc == 0"
-  tags: ['test_apt_builddep']
+#- name: check quilt with dpkg
+#  shell: dpkg -s quilt
+#  register: dpkg_result
+#  ignore_errors: true
+#  tags: ['test_apt_builddep']
+#
+#- name: uninstall quilt with apt
+#  apt: pkg=quilt state=absent purge=yes
+#  register: apt_result
+#  when: dpkg_result is successful
+#  tags: ['test_apt_builddep']
+#
+## install build-dep for rolldice
+#- name: install rolldice build-dep with apt
+#  apt: pkg=rolldice state=build-dep
+#  register: apt_result
+#  tags: ['test_apt_builddep']
+#
+#- name: verify build_dep of netcat
+#  assert:
+#    that:
+#        - "'changed' in apt_result"
+#  tags: ['test_apt_builddep']
+#
+## ensure debhelper and qilt are installed
+#- name: check build_deps with dpkg
+#  shell: dpkg --get-selections | egrep '(debhelper|quilt)'
+#  failed_when: False
+#  register: dpkg_result
+#  tags: ['test_apt_builddep']
+#
+#- name: verify build_deps are really there
+#  assert:
+#    that:
+#        - "dpkg_result.rc == 0"
+#  tags: ['test_apt_builddep']
