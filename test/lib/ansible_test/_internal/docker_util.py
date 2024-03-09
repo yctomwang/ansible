@@ -918,6 +918,7 @@ def docker_image_inspect(args: CommonConfig, image: str, always: bool = False) -
         return inspect_result
 
     print("IT GOT TRIGGERED HERE")
+    print(image)
     return None
 
 
