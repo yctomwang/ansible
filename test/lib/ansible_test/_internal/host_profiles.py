@@ -821,7 +821,7 @@ class DockerProfile(ControllerHostProfile[DockerConfig], SshTargetHostProfile[Do
 
         docker_pull(self.args, self.config.image)
         inspect = docker_image_inspect(self.args, self.config.image)
-
+        print(inspect)
         command += f'exec {shlex.join(inspect.cmd)}'
 
         return ['sh', '-c', command]
