@@ -889,7 +889,10 @@ def docker_image_inspect(args: CommonConfig, image: str, always: bool = False) -
     """
     Return the results of `docker image inspect` for the specified image or None if the image does not exist.
     """
+    print("________Thi is image")
     print(image)
+    print("screw this")
+
     inspect_cache: dict[str, DockerImageInspect]
 
     try:
