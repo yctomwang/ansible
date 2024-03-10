@@ -621,17 +621,24 @@
 #  when: srcpkgcache_bin.stat.exists
 
 # https://github.com/ansible/ansible/issues/82611
-- name: Clean APT cache
+- name: clean apt cache
   apt:
     clean: true
 
-- name: Verify APT cache files are cleaned
+- name: check for /var/cache/apt/pkgcache.bin
+  stat:
+    path: /var/cache/apt/pkgcache.bin
+  register: pkgcache_bin
+
+- name: check for /var/cache/apt/srcpkgcache.bin
+  stat:
+    path: /var/cache/apt/srcpkgcache.bin
+  register: srcpkgcache_bin
+
+- name: verify apt cache files are cleaned
   assert:
     that:
       - not pkgcache_bin.stat.exists
       - not srcpkgcache_bin.stat.exists
-    fail_msg: "APT cache files still exist."
-    success_msg: "APT cache files are cleaned."
-  vars:
-    pkgcache_bin: "{{ lookup('stat', '/var/cache/apt/pkgcache.bin') }}"
-    srcpkgcache_bin: "{{ lookup('stat', '/var/cache/apt/srcpkgcache.bin') }}"
+    fail_msg: "apt cache files still exist."
+    success_msg: "apt cache files are cleaned."
