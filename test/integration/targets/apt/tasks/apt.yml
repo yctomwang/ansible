@@ -595,26 +595,43 @@
     state: absent
     purge: yes
 
+
+#- name: Clean APT cache
+#  apt:
+#    clean: true
+#
+#- name: Check for /var/cache/apt/pkgcache.bin
+#  stat:
+#    path: /var/cache/apt/pkgcache.bin
+#  register: pkgcache_bin
+#
+#- name: Check for /var/cache/apt/srcpkgcache.bin
+#  stat:
+#    path: /var/cache/apt/srcpkgcache.bin
+#  register: srcpkgcache_bin
+#
+#- name: Verify /var/cache/apt/pkgcache.bin is cleaned
+#  fail:
+#    msg: "/var/cache/apt/pkgcache.bin still exists."
+#  when: pkgcache_bin.stat.exists
+#
+#- name: Verify /var/cache/apt/srcpkgcache.bin is cleaned
+#  fail:
+#    msg: "/var/cache/apt/srcpkgcache.bin still exists."
+#  when: srcpkgcache_bin.stat.exists
+
+
 - name: Clean APT cache
   apt:
     clean: true
 
-- name: Check for /var/cache/apt/pkgcache.bin
-  stat:
-    path: /var/cache/apt/pkgcache.bin
-  register: pkgcache_bin
-
-- name: Check for /var/cache/apt/srcpkgcache.bin
-  stat:
-    path: /var/cache/apt/srcpkgcache.bin
-  register: srcpkgcache_bin
-
-- name: Verify /var/cache/apt/pkgcache.bin is cleaned
-  fail:
-    msg: "/var/cache/apt/pkgcache.bin still exists."
-  when: pkgcache_bin.stat.exists
-
-- name: Verify /var/cache/apt/srcpkgcache.bin is cleaned
-  fail:
-    msg: "/var/cache/apt/srcpkgcache.bin still exists."
-  when: srcpkgcache_bin.stat.exists
+- name: Verify APT cache files are cleaned
+  assert:
+    that:
+      - not pkgcache_bin.stat.exists
+      - not srcpkgcache_bin.stat.exists
+    fail_msg: "APT cache files still exist."
+    success_msg: "APT cache files are cleaned."
+  vars:
+    pkgcache_bin: "{{ lookup('ansible.builtin.stat', '/var/cache/apt/pkgcache.bin') }}"
+    srcpkgcache_bin: "{{ lookup('ansible.builtin.stat', '/var/cache/apt/srcpkgcache.bin') }}"
