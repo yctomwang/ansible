@@ -95,10 +95,18 @@
     dest: "{{ extraction_path }}"
     remote_src: yes
 
-- name: List extracted collection directory
+#- name: List extracted collection directory
+#  ansible.builtin.command:
+#    cmd: ls -la /tmp/ansible_collections_extraction/ansible_collections/
+#  register: ls_output
+- name: List contents of the extraction directory
   ansible.builtin.command:
-    cmd: ls -la /tmp/ansible_collections_extraction/ansible_collections/
-  register: ls_output
+    cmd: ls -la /tmp/ansible_collections_extraction
+  register: ls_extraction_dir
+
+- name: Show contents of the extraction directory
+  debug:
+    var: ls_extraction_dir.stdout_lines
 
 - name: Show directory listing
   debug:
