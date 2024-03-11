@@ -83,16 +83,18 @@
   set_fact:
     extraction_path: "/tmp/ansible_collections_extraction"
 
-- name: Extract collection artifact
-  unarchive:
-    src: "{{ artifact_path }}"
-    dest: "{{ extraction_path }}"
-    remote_src: yes
 - name: Ensure extraction directory exists
   file:
     path: "{{ extraction_path }}"
     state: directory
     mode: '0755'
+
+- name: Extract collection artifact
+  unarchive:
+    src: "{{ artifact_path }}"
+    dest: "{{ extraction_path }}"
+    remote_src: yes
+
 
 
 # Followed by slurp tasks to read MANIFEST.json and FILES.json as shown previously
