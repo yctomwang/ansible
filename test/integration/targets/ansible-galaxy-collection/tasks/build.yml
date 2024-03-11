@@ -75,6 +75,10 @@
   set_fact:
     artifact_path: "{{ build_existing_force.stdout_lines | select('search', 'Created collection for ansible_test.my_collection at ') | map('regex_replace', '.* at (.*)$', '\\1') | first }}"
 
+- name: Show artifact_path
+  debug:
+    msg: "The artifact path is: '{{ artifact_path }}'"
+
 - name: Extract collection artifact
   unarchive:
     src: "{{ artifact_path }}"
