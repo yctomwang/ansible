@@ -114,12 +114,12 @@
 
 - name: Slurp MANIFEST.json content
   slurp:
-    src: "{{ extraction_path }}/ansible_collections/namespace/name/MANIFEST.json"
+    src: "/tmp/ansible_collections_extraction/MANIFEST.json"
   register: manifest_content
 
 - name: Slurp FILES.json content
   slurp:
-    src: "{{ extraction_path }}/ansible_collections/namespace/name/FILES.json"
+    src: "/tmp/ansible_collections_extraction/FILES.json"
   register: files_content
 
 - name: Decode and display MANIFEST.json content
@@ -130,18 +130,36 @@
   debug:
     msg: "{{ files_content['content'] | b64decode | from_json }}"
 
-
-
-
-# Followed by slurp tasks to read MANIFEST.json and FILES.json as shown previously
-
-- name: Print output of build command without force
-  debug:
-    msg: "{{ build_existing_no_force }}"
-
-- name: Print output of build command with force
-  debug:
-    msg: "{{ build_existing_force }}"
+#- name: Slurp MANIFEST.json content
+#  slurp:
+#    src: "{{ extraction_path }}/ansible_collections/namespace/name/MANIFEST.json"
+#  register: manifest_content
+#
+#- name: Slurp FILES.json content
+#  slurp:
+#    src: "{{ extraction_path }}/ansible_collections/namespace/name/FILES.json"
+#  register: files_content
+#
+#- name: Decode and display MANIFEST.json content
+#  debug:
+#    msg: "{{ manifest_content['content'] | b64decode | from_json }}"
+#
+#- name: Decode and display FILES.json content
+#  debug:
+#    msg: "{{ files_content['content'] | b64decode | from_json }}"
+#
+#
+#
+#
+## Followed by slurp tasks to read MANIFEST.json and FILES.json as shown previously
+#
+#- name: Print output of build command without force
+#  debug:
+#    msg: "{{ build_existing_no_force }}"
+#
+#- name: Print output of build command with force
+#  debug:
+#    msg: "{{ build_existing_force }}"
 
 #
 #- name: build collection containing ignored files
