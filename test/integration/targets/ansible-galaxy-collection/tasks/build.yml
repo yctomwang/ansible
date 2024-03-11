@@ -88,6 +88,12 @@
     src: "{{ artifact_path }}"
     dest: "{{ extraction_path }}"
     remote_src: yes
+- name: Ensure extraction directory exists
+  file:
+    path: "{{ extraction_path }}"
+    state: directory
+    mode: '0755'
+
 
 # Followed by slurp tasks to read MANIFEST.json and FILES.json as shown previously
 
