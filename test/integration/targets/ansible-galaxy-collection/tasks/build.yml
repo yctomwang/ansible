@@ -95,6 +95,15 @@
     dest: "{{ extraction_path }}"
     remote_src: yes
 
+- name: List extracted collection directory
+  ansible.builtin.command:
+    cmd: ls -la /tmp/ansible_collections_extraction/ansible_collections/
+  register: ls_output
+
+- name: Show directory listing
+  debug:
+    var: ls_output.stdout_lines
+
 - name: Slurp MANIFEST.json content
   slurp:
     src: "{{ extraction_path }}/ansible_collections/namespace/name/MANIFEST.json"
