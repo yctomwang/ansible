@@ -79,6 +79,10 @@
   debug:
     msg: "The artifact path is: '{{ artifact_path }}'"
 
+- name: Define extraction path
+  set_fact:
+    extraction_path: "/tmp/ansible_collections_extraction"
+
 - name: Extract collection artifact
   unarchive:
     src: "{{ artifact_path }}"
