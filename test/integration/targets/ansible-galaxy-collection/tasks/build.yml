@@ -95,6 +95,25 @@
     dest: "{{ extraction_path }}"
     remote_src: yes
 
+- name: Slurp MANIFEST.json content
+  slurp:
+    src: "{{ extraction_path }}/ansible_collections/namespace/name/MANIFEST.json"
+  register: manifest_content
+
+- name: Slurp FILES.json content
+  slurp:
+    src: "{{ extraction_path }}/ansible_collections/namespace/name/FILES.json"
+  register: files_content
+
+- name: Decode and display MANIFEST.json content
+  debug:
+    msg: "{{ manifest_content['content'] | b64decode | from_json }}"
+
+- name: Decode and display FILES.json content
+  debug:
+    msg: "{{ files_content['content'] | b64decode | from_json }}"
+
+
 
 
 # Followed by slurp tasks to read MANIFEST.json and FILES.json as shown previously
