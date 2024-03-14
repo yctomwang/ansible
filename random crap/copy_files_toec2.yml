@@ -1,0 +1,12 @@
+- name: Copy files to EC2 instance
+  hosts: ec2-hosts
+  vars:
+    ansible_ssh_private_key_file: ~/Desktop/newjob.pem
+    ansible_user: ubuntu
+  tasks:
+    - name: Synchronize files to /data-srv on the remote server
+      synchronize:
+        src: files/
+        dest: /data-srv
+        delete: yes
+      delegate_to: localhost
