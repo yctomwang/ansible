@@ -1316,7 +1316,10 @@ def _build_collection_tar(
             for name, b in [(MANIFEST_FILENAME, collection_manifest_json), ('FILES.json', files_manifest_json)]:
                 print("phuc")
                 print(files_manifest_json)
+                print("phuc2")
                 print(collection_manifest_json)
+                print("phuc3")
+
                 b_io = BytesIO(b)
                 tar_info = tarfile.TarInfo(name)
                 tar_info.size = len(b)
