@@ -1314,6 +1314,7 @@ def _build_collection_tar(
         with tarfile.open(b_tar_filepath, mode='w:gz') as tar_file:
             # Add the MANIFEST.json and FILES.json file to the archive
             for name, b in [(MANIFEST_FILENAME, collection_manifest_json), ('FILES.json', files_manifest_json)]:
+                print("phuc")
                 print(files_manifest_json)
                 print(collection_manifest_json)
                 b_io = BytesIO(b)
