@@ -122,10 +122,6 @@
     src: "/tmp/ansible_collections_extraction/FILES.json"
   register: files_content
 
-- name: Decode and display MANIFEST.json content
-  debug:
-    msg: "{{ manifest_content['content'] | b64decode | from_json }}"
-
 - name: Decode and display FILES.json content
   set_fact:
     decoded_files_json: "{{ files_content['content'] | b64decode | from_json }}"
@@ -134,10 +130,13 @@
   debug:
     msg: "{{ decoded_files_json }}"
 
+- name: Set files_names for later use
+  set_fact:
+    files_names: "{{ decoded_files_json['files'] | map(attribute='name') | list }}"
+
 - name: Debug sorted file names
   debug:
     msg: "{{ files_names | sort }}"
-
 
 - name: Ensure files are sorted in ASCII order by name
   assert:
@@ -145,8 +144,6 @@
       - files_names | sort == files_names
     fail_msg: "The files are not sorted in ASCII order by their names."
     success_msg: "The files are sorted in ASCII order by their names."
-  vars:
-    files_names: "{{ decoded_files_json['files'] | map(attribute='name') | list }}"
 
 
 
