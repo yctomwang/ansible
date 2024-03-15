@@ -127,8 +127,23 @@
     msg: "{{ manifest_content['content'] | b64decode | from_json }}"
 
 - name: Decode and display FILES.json content
+  set_fact:
+    decoded_files_json: "{{ files_content['content'] | b64decode | from_json }}"
+
+- name: Debug decoded FILES.json content
   debug:
-    msg: "{{ files_content['content'] | b64decode | from_json }}"
+    msg: "{{ decoded_files_json }}"
+
+- name: Ensure files are sorted in ASCII order by name
+  assert:
+    that:
+      - files_names | sort == files_names
+    fail_msg: "The files are not sorted in ASCII order by their names."
+    success_msg: "The files are sorted in ASCII order by their names."
+  vars:
+    files_names: "{{ decoded_files_json['files'] | map(attribute='name') | list }}"
+
+
 
 #- name: Slurp MANIFEST.json content
 #  slurp:
