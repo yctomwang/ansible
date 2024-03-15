@@ -134,6 +134,11 @@
   debug:
     msg: "{{ decoded_files_json }}"
 
+- name: Debug sorted file names
+  debug:
+    msg: "{{ files_names | sort }}"
+
+
 - name: Ensure files are sorted in ASCII order by name
   assert:
     that:
