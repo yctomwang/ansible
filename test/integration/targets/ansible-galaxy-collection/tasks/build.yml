@@ -130,7 +130,7 @@
   debug:
     msg: "{{ decoded_files_json }}"
 
-- name: Set expected order of file names
+- name: Set expected order of file names in FILES.json
   set_fact:
     expected_files_order: [
       ".",
