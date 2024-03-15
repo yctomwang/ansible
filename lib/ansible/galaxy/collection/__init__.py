@@ -550,6 +550,9 @@ def download_collections(
             format(path=output_path),
     ):
         for fqcn, concrete_coll_pin in dep_map.copy().items():  # FIXME: move into the provider
+            print("-------TTTT-------")
+            print(concrete_coll_pin)
+            print("____JJJ_____")
             if concrete_coll_pin.is_virtual:
                 display.display(
                     '{coll!s} is not downloadable'.
