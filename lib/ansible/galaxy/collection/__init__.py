@@ -1266,7 +1266,7 @@ def _build_files_manifest_walk(b_collection_path, namespace, name, ignore_patter
                 )
 
     _walk(b_collection_path, b_collection_path)
-
+    #we can do a sort here
     return manifest
 
 
