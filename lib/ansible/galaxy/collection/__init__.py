@@ -1192,8 +1192,9 @@ def _build_files_manifest_distlib(b_collection_path, namespace, name, manifest_c
         manifest['files'].append(manifest_entry)
 
     #we will do  a sort here
-    print("----PLEASEWORK___")
-    print(manifest)
+    # print("----PLEASEWORK___")
+    # print(manifest)
+    manifest["files"].sort(key=lambda x: x["name"])
     return manifest
 
 
@@ -1266,7 +1267,8 @@ def _build_files_manifest_walk(b_collection_path, namespace, name, ignore_patter
                 )
 
     _walk(b_collection_path, b_collection_path)
-    #we can do a sort here
+    # todo:we can do a sort here
+    manifest["files"].sort(key=lambda x: x["name"])
     return manifest
 
 
