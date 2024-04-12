@@ -208,19 +208,20 @@ class ShellBase(AnsiblePlugin):
 
     def build_module_command(self, env_string, shebang, cmd, arg_path=None):
         # don't quote the cmd if it's an empty string, because this will break pipelining mode
-        # if cmd.strip() != '':
-        #     cmd = shlex.quote(cmd)
+        if cmd.strip() != '':
+            cmd = shlex.quote(cmd)
 
         cmd_parts = []
         if shebang:
             shebang = shebang.replace("#!", "").strip()
         else:
             shebang = ""
-        # cmd_parts.extend([env_string.strip(), shebang, cmd])
-        cmd_parts.extend([env_string, shebang, cmd])
+        cmd_parts.extend([env_string.strip(), shebang, cmd])
+        # cmd_parts.extend([env_string, shebang, cmd])
         if arg_path is not None:
             cmd_parts.append(arg_path)
-        new_cmd = shlex.join(cps for cp in cmd_parts if cp and (cps := cp.strip()))
+        new_cmd = " ".join(cmd_parts)
+        # new_cmd = shlex.join(cps for cp in cmd_parts if cp and (cps := cp.strip()))
         return new_cmd
 
     def append_command(self, cmd, cmd_to_append):
