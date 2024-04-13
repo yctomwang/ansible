@@ -257,6 +257,9 @@ class ShellBase(AnsiblePlugin):
 
     def build_module_command(self, env_string, shebang, cmd, arg_path=None):
         cmd_parts = []
+
+        print("SHHHHHIIIIITTT", file=sys.stderr)
+        print("Raw inputs:", env_string, shebang, cmd, arg_path, file=sys.stderr)  # Debug print
         if shebang:
             # Extract only the interpreter path from the shebang
             shebang = shebang.split()[0].replace("#!", "").strip()
