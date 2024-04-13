@@ -222,6 +222,8 @@ class ShellBase(AnsiblePlugin):
             cmd_parts.append(arg_path)
         # new_cmd = " ".join(cmd_parts)
         new_cmd = shlex.join(cps for cp in cmd_parts if cp and (cps := cp.strip()))
+        print("FUCKKK")
+        print((new_cmd))
         return new_cmd
 
     def append_command(self, cmd, cmd_to_append):
