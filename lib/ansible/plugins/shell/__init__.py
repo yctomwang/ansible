@@ -206,22 +206,50 @@ class ShellBase(AnsiblePlugin):
         """Return the working directory after connecting"""
         return 'echo %spwd%s' % (self._SHELL_SUB_LEFT, self._SHELL_SUB_RIGHT)
 
-    def build_module_command(self, env_string, shebang, cmd, arg_path=None):
-        #don't quote the cmd if it's an empty string, because this will break pipelining mode
-        if cmd.strip() != '':
-            cmd = shlex.quote(cmd)
+    # def build_module_command(self, env_string, shebang, cmd, arg_path=None):
+    #     #don't quote the cmd if it's an empty string, because this will break pipelining mode
+    #     if cmd.strip() != '':
+    #         cmd = shlex.quote(cmd)
+    #
+    #     cmd_parts = []
+    #     if shebang:
+    #         shebang = shebang.replace("#!", "").strip()
+    #     else:
+    #         shebang = ""
+    #     cmd_parts.extend([env_string.strip(), shebang, cmd])
+    #     # cmd_parts.extend([env_string, shebang, cmd])
+    #     if arg_path is not None:
+    #         cmd_parts.append(arg_path)
+    #     new_cmd = " ".join(cmd_parts)
+    #     # new_cmd = shlex.join(cps for cp in cmd_parts if cp and (cps := cp.strip()))
+    #     return new_cmd
 
+    def build_module_command(self, env_string, shebang, cmd, arg_path=None):
         cmd_parts = []
         if shebang:
             shebang = shebang.replace("#!", "").strip()
         else:
             shebang = ""
-        cmd_parts.extend([env_string.strip(), shebang, cmd])
-        # cmd_parts.extend([env_string, shebang, cmd])
-        if arg_path is not None:
-            cmd_parts.append(arg_path)
-        new_cmd = " ".join(cmd_parts)
-        # new_cmd = shlex.join(cps for cp in cmd_parts if cp and (cps := cp.strip()))
+
+        # Prepare components ensuring they are cleanly stripped of unnecessary spaces
+        # without disturbing essential internal spaces for paths etc.
+        env_string_clean = env_string.strip()
+        shebang_clean = shebang
+        cmd_clean = cmd.strip()  # Assuming cmd should still be trimmed of outer whitespace
+        arg_path_clean = arg_path.strip() if arg_path is not None else None
+
+        # Only add non-empty components
+        if env_string_clean:
+            cmd_parts.append(env_string_clean)
+        if shebang_clean:
+            cmd_parts.append(shebang_clean)
+        if cmd_clean:
+            cmd_parts.append(cmd_clean)
+        if arg_path_clean:
+            cmd_parts.append(arg_path_clean)
+
+        # Use shlex.join to safely create the final command string with correct quoting
+        new_cmd = shlex.join(cmd_parts)
         return new_cmd
 
     def append_command(self, cmd, cmd_to_append):
