@@ -207,25 +207,25 @@ class ShellBase(AnsiblePlugin):
         """Return the working directory after connecting"""
         return 'echo %spwd%s' % (self._SHELL_SUB_LEFT, self._SHELL_SUB_RIGHT)
 
-    def build_module_command(self, env_string, shebang, cmd, arg_path=None):
-        #don't quote the cmd if it's an empty string, because this will break pipelining mode
-        # if cmd.strip() != '':
-        #     cmd = shlex.quote(cmd)
-        print("FUCCCCKKK", file=sys.stderr)
-        print("Raw inputs:", env_string, shebang, cmd, arg_path, file=sys.stderr)  # Debug print
-
-        cmd_parts = []
-        if shebang:
-            shebang = shebang.replace("#!", "").strip()
-        else:
-            shebang = ""
-        # cmd_parts.extend([env_string.strip(), shebang, cmd])
-        cmd_parts.extend([env_string, shebang, cmd])
-        if arg_path is not None:
-            cmd_parts.append(arg_path)
-        # new_cmd = " ".join(cmd_parts)
-        new_cmd = shlex.join(cps for cp in cmd_parts if cp and (cps := cp.strip()))
-        return new_cmd
+    # def build_module_command(self, env_string, shebang, cmd, arg_path=None):
+    #     #don't quote the cmd if it's an empty string, because this will break pipelining mode
+    #     # if cmd.strip() != '':
+    #     #     cmd = shlex.quote(cmd)
+    #     print("FUCCCCKKK", file=sys.stderr)
+    #     print("Raw inputs:", env_string, shebang, cmd, arg_path, file=sys.stderr)  # Debug print
+    #
+    #     cmd_parts = []
+    #     if shebang:
+    #         shebang = shebang.replace("#!", "").strip()
+    #     else:
+    #         shebang = ""
+    #     # cmd_parts.extend([env_string.strip(), shebang, cmd])
+    #     cmd_parts.extend([env_string, shebang, cmd])
+    #     if arg_path is not None:
+    #         cmd_parts.append(arg_path)
+    #     # new_cmd = " ".join(cmd_parts)
+    #     new_cmd = shlex.join(cps for cp in cmd_parts if cp and (cps := cp.strip()))
+    #     return new_cmd
 
     # def build_module_command(self, env_string, shebang, cmd, arg_path=None):
     #     cmd_parts = []
@@ -254,6 +254,38 @@ class ShellBase(AnsiblePlugin):
     #     # Use shlex.join to safely create the final command string with correct quoting
     #     new_cmd = shlex.join(cmd_parts)
     #     return new_cmd
+
+    def build_module_command(self, env_string, shebang, cmd, arg_path=None):
+        cmd_parts = []
+        if shebang:
+            # Extract only the interpreter path from the shebang
+            shebang = shebang.split()[0].replace("#!", "").strip()
+        else:
+            shebang = ""
+
+        # Prepare components ensuring they are cleanly stripped of unnecessary spaces
+        # without disturbing essential internal spaces for paths etc.
+        env_string_clean = env_string.strip() if env_string else ""
+        cmd_clean = cmd.strip() if cmd else ""
+        arg_path_clean = arg_path.strip() if arg_path is not None else None
+
+        # Add environment settings
+        if env_string_clean:
+            cmd_parts.extend(shlex.split(env_string_clean))
+
+        # Add shebang if it's valid and needed
+        if shebang:
+            cmd_parts.append(shebang)
+
+        # Add command and arg path
+        if cmd_clean:
+            cmd_parts.append(cmd_clean)
+        if arg_path_clean:
+            cmd_parts.append(arg_path_clean)
+
+        # Use shlex.join to safely create the final command string with correct quoting
+        new_cmd = shlex.join(cmd_parts)
+        return new_cmd
 
     def append_command(self, cmd, cmd_to_append):
         """Append an additional command if supported by the shell"""
