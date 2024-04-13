@@ -210,7 +210,8 @@ class ShellBase(AnsiblePlugin):
         #don't quote the cmd if it's an empty string, because this will break pipelining mode
         # if cmd.strip() != '':
         #     cmd = shlex.quote(cmd)
-        print("Raw inputs:", env_string, shebang, cmd, arg_path)  # Debug print
+        print("FUCCCCKKK", file=sys.stderr)
+        print("Raw inputs:", env_string, shebang, cmd, arg_path, file=sys.stderr)  # Debug print
 
         cmd_parts = []
         if shebang:
