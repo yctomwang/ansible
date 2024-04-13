@@ -25,6 +25,9 @@ fi
 echo "running playbook-backed docs tests"
 ansible-playbook test.yml -i inventory "$@"
 
+##DEBUGG
+#exit 1
+
 # test keyword docs
 ansible-doc -t keyword -l | grep "${GREP_OPTS[@]}" 'vars_prompt: list of variables to prompt for.'
 ansible-doc -t keyword vars_prompt | grep "${GREP_OPTS[@]}" 'description: list of variables to prompt for.'
