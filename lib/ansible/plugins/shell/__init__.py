@@ -288,6 +288,7 @@ class ShellBase(AnsiblePlugin):
 
         # Use shlex.join to safely create the final command string with correct quoting
         new_cmd = shlex.join(cmd_parts)
+        print(new_cmd, file=sys.stderr)
         return new_cmd
 
     def append_command(self, cmd, cmd_to_append):
