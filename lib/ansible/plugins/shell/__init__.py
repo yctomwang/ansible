@@ -255,40 +255,69 @@ class ShellBase(AnsiblePlugin):
     #     new_cmd = shlex.join(cmd_parts)
     #     return new_cmd
 
-    def build_module_command(self, env_string, shebang, cmd, arg_path=None):
-        cmd_parts = []
+    # def build_module_command(self, env_string, shebang, cmd, arg_path=None):
+    #     cmd_parts = []
+    #
+    #     print("SHHHHHIIIIITTT", file=sys.stderr)
+    #     print("Raw inputs:", env_string, shebang, cmd, arg_path, file=sys.stderr)  # Debug print
+    #     if shebang:
+    #         # Extract only the interpreter path from the shebang
+    #         shebang = shebang.split()[0].replace("#!", "").strip()
+    #     else:
+    #         shebang = ""
+    #
+    #     # Prepare components ensuring they are cleanly stripped of unnecessary spaces
+    #     # without disturbing essential internal spaces for paths etc.
+    #     env_string_clean = env_string.strip() if env_string else ""
+    #     cmd_clean = cmd.strip() if cmd else ""
+    #     arg_path_clean = arg_path.strip() if arg_path is not None else None
+    #
+    #     # Add environment settings
+    #     if env_string_clean:
+    #         cmd_parts.extend(shlex.split(env_string_clean))
+    #
+    #     # Add shebang if it's valid and needed
+    #     if shebang:
+    #         cmd_parts.append(shebang)
+    #
+    #     # Add command and arg path
+    #     if cmd_clean:
+    #         cmd_parts.append(cmd_clean)
+    #     if arg_path_clean:
+    #         cmd_parts.append(arg_path_clean)
+    #
+    #     # Use shlex.join to safely create the final command string with correct quoting
+    #     new_cmd = shlex.join(cmd_parts)
+    #     print(new_cmd, file=sys.stderr)
+    #     return new_cmd
 
-        print("SHHHHHIIIIITTT", file=sys.stderr)
-        print("Raw inputs:", env_string, shebang, cmd, arg_path, file=sys.stderr)  # Debug print
+    def build_module_command(self, env_string, shebang, cmd, arg_path=None):
+        # Don't quote the cmd if it's an empty string, because this will break pipelining mode
+        if cmd.strip() != '':
+            cmd = shlex.quote(cmd)
+
+        cmd_parts = []
         if shebang:
-            # Extract only the interpreter path from the shebang
-            shebang = shebang.split()[0].replace("#!", "").strip()
+            # Remove only the '#!' from the start if it exists and quote the remaining part
+            if shebang.startswith("#!"):
+                # Quote the path part of shebang to ensure spaces are preserved
+                shebang = shlex.quote(shebang[2:].strip())
         else:
             shebang = ""
 
-        # Prepare components ensuring they are cleanly stripped of unnecessary spaces
-        # without disturbing essential internal spaces for paths etc.
-        env_string_clean = env_string.strip() if env_string else ""
-        cmd_clean = cmd.strip() if cmd else ""
-        arg_path_clean = arg_path.strip() if arg_path is not None else None
-
-        # Add environment settings
-        if env_string_clean:
-            cmd_parts.extend(shlex.split(env_string_clean))
-
-        # Add shebang if it's valid and needed
+        # Strip and append the environment string and shebang if they are not empty
+        if env_string.strip():
+            cmd_parts.append(env_string.strip())
         if shebang:
             cmd_parts.append(shebang)
 
-        # Add command and arg path
-        if cmd_clean:
-            cmd_parts.append(cmd_clean)
-        if arg_path_clean:
-            cmd_parts.append(arg_path_clean)
+        # Append the command and optionally the argument path
+        cmd_parts.append(cmd)
+        if arg_path is not None:
+            cmd_parts.append(arg_path)
 
-        # Use shlex.join to safely create the final command string with correct quoting
-        new_cmd = shlex.join(cmd_parts)
-        print(new_cmd, file=sys.stderr)
+        # Join all parts into the final command string
+        new_cmd = " ".join(cmd_parts)
         return new_cmd
 
     def append_command(self, cmd, cmd_to_append):
