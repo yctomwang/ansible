@@ -51,6 +51,8 @@ ln -s "$python_path" "$dir/python"
 
 echo "Symbolic link created at: $dir/python"
 
+echo $(head -1 $(which ansible-playbook))
+
 
 exit 69
 
