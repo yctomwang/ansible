@@ -25,6 +25,10 @@ fi
 echo "running playbook-backed docs tests"
 ansible-playbook test.yml -i inventory "$@"
 
+python_path=$(which python)
+echo "The current location of Python is: $python_path"
+
+exit 69
 
 
 # test keyword docs
