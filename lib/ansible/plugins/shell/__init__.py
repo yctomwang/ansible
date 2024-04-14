@@ -335,7 +335,6 @@ class ShellBase(AnsiblePlugin):
         new_cmd = " ".join(cmd_parts)
         return new_cmd
 
-    def append_command(self, cmd, cmd_to_append):
 
     def append_command(self, cmd, cmd_to_append):
         """Append an additional command if supported by the shell"""
