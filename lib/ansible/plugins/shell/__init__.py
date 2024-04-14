@@ -291,34 +291,51 @@ class ShellBase(AnsiblePlugin):
     #     print(new_cmd, file=sys.stderr)
     #     return new_cmd
 
+    # def build_module_command(self, env_string, shebang, cmd, arg_path=None):
+    #     # Don't quote the cmd if it's an empty string, because this will break pipelining mode
+    #     if cmd.strip() != '':
+    #         cmd = shlex.quote(cmd)
+    #
+    #     cmd_parts = []
+    #     if shebang:
+    #         # Remove only the '#!' from the start if it exists and quote the remaining part
+    #         if shebang.startswith("#!"):
+    #             # Quote the path part of shebang to ensure spaces are preserved
+    #             shebang = shlex.quote(shebang[2:].strip())
+    #     else:
+    #         shebang = ""
+    #
+    #     # Strip and append the environment string and shebang if they are not empty
+    #     if env_string.strip():
+    #         cmd_parts.append(env_string.strip())
+    #     if shebang:
+    #         cmd_parts.append(shebang)
+    #
+    #     # Append the command and optionally the argument path
+    #     cmd_parts.append(cmd)
+    #     if arg_path is not None:
+    #         cmd_parts.append(arg_path)
+    #
+    #     # Join all parts into the final command string
+    #     new_cmd = " ".join(cmd_parts)
+    #     return new_cmd
     def build_module_command(self, env_string, shebang, cmd, arg_path=None):
-        # Don't quote the cmd if it's an empty string, because this will break pipelining mode
+        # don't quote the cmd if it's an empty string, because this will break pipelining mode
         if cmd.strip() != '':
             cmd = shlex.quote(cmd)
 
         cmd_parts = []
         if shebang:
-            # Remove only the '#!' from the start if it exists and quote the remaining part
-            if shebang.startswith("#!"):
-                # Quote the path part of shebang to ensure spaces are preserved
-                shebang = shlex.quote(shebang[2:].strip())
+            shebang = shebang.replace("#!", "").strip()
         else:
             shebang = ""
-
-        # Strip and append the environment string and shebang if they are not empty
-        if env_string.strip():
-            cmd_parts.append(env_string.strip())
-        if shebang:
-            cmd_parts.append(shebang)
-
-        # Append the command and optionally the argument path
-        cmd_parts.append(cmd)
+        cmd_parts.extend([env_string.strip(), shebang, cmd])
         if arg_path is not None:
             cmd_parts.append(arg_path)
-
-        # Join all parts into the final command string
         new_cmd = " ".join(cmd_parts)
         return new_cmd
+
+    def append_command(self, cmd, cmd_to_append):
 
     def append_command(self, cmd, cmd_to_append):
         """Append an additional command if supported by the shell"""
