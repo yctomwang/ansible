@@ -25,8 +25,32 @@ fi
 echo "running playbook-backed docs tests"
 ansible-playbook test.yml -i inventory "$@"
 
+#python_path=$(which python)
+#echo "The current location of Python is: $python_path"
+
+#!/bin/bash
+# Create a directory and symbolic link for Python with space in the path
+
+# Directory to hold the symbolic link
+dir=~/My\ Folder
+
+# Create directory if it doesn't exist
+mkdir -p "$dir"
+
+# Dynamically determine Python executable path
 python_path=$(which python)
-echo "The current location of Python is: $python_path"
+
+# Check if the Python path was successfully found
+if [[ -z "$python_path" ]]; then
+    echo "Python is not installed or not found in the PATH."
+    exit 1
+fi
+
+# Create the symbolic link
+ln -s "$python_path" "$dir/python"
+
+echo "Symbolic link created at: $dir/python"
+
 
 exit 69
 
