@@ -99,7 +99,7 @@
 
 - name: Slurp FILES.json content
   slurp:
-    src: "/tmp/ansible_collections_extraction/FILES.json"
+    src: "/tmp/new_ansible_collections_extraction/FILES.json"
   register: files_content
 
 - name: Decode FILES.json content
