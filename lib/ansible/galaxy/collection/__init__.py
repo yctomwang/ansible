@@ -1188,7 +1188,7 @@ def _build_files_manifest_distlib(b_collection_path, namespace, name, manifest_c
 
         manifest['files'].append(manifest_entry)
 
-    manifest["files"].sort(key=lambda x: x["name"])
+    # manifest["files"].sort(key=lambda x: x["name"])
     return manifest
 
 
@@ -1261,7 +1261,7 @@ def _build_files_manifest_walk(b_collection_path, namespace, name, ignore_patter
                 )
 
     _walk(b_collection_path, b_collection_path)
-    manifest["files"].sort(key=lambda x: x["name"])
+    # manifest["files"].sort(key=lambda x: x["name"])
 
     return manifest
 
