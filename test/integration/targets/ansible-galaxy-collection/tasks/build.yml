@@ -83,7 +83,7 @@
 
 - name: Define extraction path
   set_fact:
-    extraction_path: "/tmp/ansible_collections_extraction"
+    extraction_path: "/tmp/new_ansible_collections_extraction"
 
 - name: Ensure extraction directory exists
   file:
