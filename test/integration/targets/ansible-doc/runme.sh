@@ -51,7 +51,34 @@ ln -s "$python_path" "$dir/python"
 
 echo "Symbolic link created at: $dir/python"
 
-export ANSIBLE_PYTHON_INTERPRETER=~/My\ Folder/python
+
+# Locate the ansible-playbook executable
+ansible_path=$(which ansible-playbook)
+
+if [[ -z "$ansible_path" ]]; then
+    echo "ansible-playbook is not installed or not found in PATH."
+    exit 1
+fi
+
+# Define new Python path
+new_python_path="/home/your_username/My Folder/python"  # Replace 'your_username' with your actual username
+
+# Ensure the new Python path exists
+if [[ ! -e "$new_python_path" ]]; then
+    echo "The specified Python interpreter does not exist: $new_python_path"
+    exit 1
+fi
+
+# Using sed to replace the shebang line
+sudo sed -i "1s|.*|#!$new_python_path|" "$ansible_path"
+
+# Confirm the change
+shebang_updated=$(head -1 "$ansible_path")
+echo "Updated shebang line to: $shebang_updated"
+
+# Optionally, make sure the file is still executable
+sudo chmod +x "$ansible_path"
+
 
 #echo $(head -1 $(which ansible-playbook))
 
