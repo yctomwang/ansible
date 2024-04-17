@@ -337,6 +337,7 @@ class ShellBase(AnsiblePlugin):
             arg_path = shlex.quote(arg_path)
             cmd_parts.append(arg_path)
         new_cmd = " ".join(cmd_parts)
+        print(new_cmd)
         return new_cmd
 
 
