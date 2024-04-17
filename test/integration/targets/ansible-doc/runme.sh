@@ -32,13 +32,59 @@ ansible-playbook test.yml -i inventory "$@"
 # Create a directory and symbolic link for Python with space in the path
 
 # Directory to hold the symbolic link
+#dir=~/My\ Folder
+#
+## Create directory if it doesn't exist
+#mkdir -p "$dir"
+#
+## Dynamically determine Python executable path
+#python_path=$(which python)
+#
+## Check if the Python path was successfully found
+#if [[ -z "$python_path" ]]; then
+#    echo "Python is not installed or not found in the PATH."
+#    exit 1
+#fi
+#
+## Create the symbolic link
+#ln -s "$python_path" "$dir/python"
+#
+#echo "Symbolic link created at: $dir/python"
+#
+#
+## Locate the ansible-playbook executable
+#ansible_path=$(which ansible-playbook)
+#
+#if [[ -z "$ansible_path" ]]; then
+#    echo "ansible-playbook is not installed or not found in PATH."
+#    exit 1
+#fi
+#
+## Define new Python path
+#new_python_path="/home/your_username/My Folder/python"  # Replace 'your_username' with your actual username
+#
+## Ensure the new Python path exists
+#if [[ ! -e "$new_python_path" ]]; then
+#    echo "The specified Python interpreter does not exist: $new_python_path"
+#    exit 1
+#fi
+#
+## Using sed to replace the shebang line
+#sudo sed -i "1s|.*|#!$new_python_path|" "$ansible_path"
+#
+## Confirm the change
+#shebang_updated=$(head -1 "$ansible_path")
+#echo "Updated shebang line to: $shebang_updated"
+# Create a directory and symbolic link for Python with space in the path
+
+# Directory to hold the symbolic link
 dir=~/My\ Folder
 
 # Create directory if it doesn't exist
 mkdir -p "$dir"
 
 # Dynamically determine Python executable path
-python_path=$(which python)
+python_path=$(which python3 || which python)
 
 # Check if the Python path was successfully found
 if [[ -z "$python_path" ]]; then
@@ -60,10 +106,10 @@ if [[ -z "$ansible_path" ]]; then
     exit 1
 fi
 
-# Define new Python path
-new_python_path="/home/your_username/My Folder/python"  # Replace 'your_username' with your actual username
+# Define new Python path as the one we just linked
+new_python_path="$dir/python"  # This now uses the link we created
 
-# Ensure the new Python path exists
+# Ensure the new Python path exists (this check is technically redundant now)
 if [[ ! -e "$new_python_path" ]]; then
     echo "The specified Python interpreter does not exist: $new_python_path"
     exit 1
@@ -75,6 +121,7 @@ sudo sed -i "1s|.*|#!$new_python_path|" "$ansible_path"
 # Confirm the change
 shebang_updated=$(head -1 "$ansible_path")
 echo "Updated shebang line to: $shebang_updated"
+
 
 # Optionally, make sure the file is still executable
 sudo chmod +x "$ansible_path"
