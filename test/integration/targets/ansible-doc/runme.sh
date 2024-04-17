@@ -82,6 +82,9 @@ sudo chmod +x "$ansible_path"
 
 #echo $(head -1 $(which ansible-playbook))
 
+echo "running playbook-backed docs tests"
+ansible-playbook test.yml -i inventory "$@"
+
 
 exit 69
 
