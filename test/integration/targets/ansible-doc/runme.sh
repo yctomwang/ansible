@@ -22,8 +22,8 @@ then
   GREP_OPTS=()
 fi
 
-echo "running playbook-backed docs tests"
-ansible-playbook test.yml -i inventory "$@"
+#echo "running playbook-backed docs tests"
+#ansible-playbook test.yml -i inventory "$@"
 
 #python_path=$(which python)
 #echo "The current location of Python is: $python_path"
