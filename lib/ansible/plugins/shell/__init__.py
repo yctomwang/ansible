@@ -320,17 +320,21 @@ class ShellBase(AnsiblePlugin):
     #     new_cmd = " ".join(cmd_parts)
     #     return new_cmd
     def build_module_command(self, env_string, shebang, cmd, arg_path=None):
-        # don't quote the cmd if it's an empty string, because this will break pipelining mode
+        # Don't quote the cmd if it's an empty string, because this will break pipelining mode
         if cmd.strip() != '':
             cmd = shlex.quote(cmd)
 
         cmd_parts = []
         if shebang:
             shebang = shebang.replace("#!", "").strip()
+            # Check if the shebang path contains spaces and quote the entire path if it does
+            if ' ' in shebang:
+                shebang = shlex.quote(shebang)
         else:
             shebang = ""
         cmd_parts.extend([env_string.strip(), shebang, cmd])
         if arg_path is not None:
+            arg_path = shlex.quote(arg_path)
             cmd_parts.append(arg_path)
         new_cmd = " ".join(cmd_parts)
         return new_cmd
