@@ -80,7 +80,7 @@
 
 - name: Create custom shell script
   blockinfile:
-    path: /usr/local/bin/custom_shell
+    path: ~/custom_shell
     create: yes
     block: |
       #!/bin/bash
@@ -110,17 +110,12 @@
 #    mode: '0755'
 #    state: file
 
-#- name: Create a new user with custom shell
-#  user:
-#    name: bob
-#    shell: /usr/local/bin/custom_shell
-#  register: user_creation_result  # This line captures the output
-
 - name: Create a new user with custom shell
   user:
     name: bob
-    shell: "~bob/custom_shell"
-  register: user_creation_result
+    shell: ~/custom_shell
+  register: user_creation_result  # This line captures the output
+
 
 - name: Print the user creation result
   debug:
