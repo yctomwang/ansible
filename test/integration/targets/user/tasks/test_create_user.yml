@@ -114,3 +114,8 @@
   user:
     name: bob
     shell: /usr/local/bin/custom_shell
+    register: user_creation_result  # This line captures the output
+
+- name: Print the user creation result
+  debug:
+    msg: "{{ user_creation_result }}"  # This line prints the output
