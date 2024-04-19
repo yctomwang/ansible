@@ -77,3 +77,40 @@
     that:
       - "'RealName: ansibulluser' in user_test2.stdout_lines "
       - "'PrimaryGroupID: 20' in user_test2.stdout_lines "
+
+- name: Create custom shell script
+  blockinfile:
+    path: /usr/local/bin/custom_shell
+    create: yes
+    block: |
+      #!/bin/bash
+          echo "Welcome to the custom shell!"
+          while true; do
+            read -p "$USER@custom-shell> " cmd
+            case $cmd in
+              "exit")
+                break
+                ;;
+              "help")
+                echo "Available commands: help, exit"
+                ;;
+              *)
+                echo "Command not found: $cmd"
+                ;;
+            esac
+          done
+          echo "Exiting custom shell."
+        mode: '0755'
+        owner: root
+        group: root
+
+- name: Ensure custom shell is executable
+  file:
+    path: /usr/local/bin/custom_shell
+    mode: '0755'
+    state: file
+
+- name: Create a new user with custom shell
+  user:
+    name: bob
+    shell: /usr/local/bin/custom_shell
