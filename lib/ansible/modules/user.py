@@ -3120,7 +3120,7 @@ def main():
             groups=dict(type='list', elements='str'),
             comment=dict(type='str'),
             home=dict(type='path'),
-            shell=dict(type='path'),
+            shell=dict(type='string'),
             password=dict(type='str', no_log=True),
             login_class=dict(type='str'),
             password_expire_max=dict(type='int', no_log=False),
