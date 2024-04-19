@@ -110,12 +110,18 @@
 #    mode: '0755'
 #    state: file
 
+#- name: Create a new user with custom shell
+#  user:
+#    name: bob
+#    shell: /usr/local/bin/custom_shell
+#  register: user_creation_result  # This line captures the output
+
 - name: Create a new user with custom shell
   user:
     name: bob
-    shell: /usr/local/bin/custom_shell
-#  register: user_creation_result  # This line captures the output
+    shell: "~bob/custom_shell"
+  register: user_creation_result
 
-#- name: Print the user creation result
-#  debug:
-#    msg: "{{ user_creation_result }}"  # This line prints the output
+- name: Print the user creation result
+  debug:
+    msg: "{{ user_creation_result }}"  # This line prints the output
