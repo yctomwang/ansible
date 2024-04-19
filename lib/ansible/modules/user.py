@@ -918,6 +918,7 @@ class User(object):
                 cmd.append('-m')
 
         if self.shell is not None and info[6] != self.shell:
+            print(1 / 0)
             cmd.append('-s')
             cmd.append(self.shell)
         # if self.shell is not None:
