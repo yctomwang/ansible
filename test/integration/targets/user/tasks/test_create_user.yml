@@ -104,11 +104,11 @@
         owner: root
         group: root
 
-- name: Ensure custom shell is executable
-  file:
-    path: /usr/local/bin/custom_shell
-    mode: '0755'
-    state: file
+#- name: Ensure custom shell is executable
+#  file:
+#    path: /usr/local/bin/custom_shell
+#    mode: '0755'
+#    state: file
 
 - name: Create a new user with custom shell
   user:
