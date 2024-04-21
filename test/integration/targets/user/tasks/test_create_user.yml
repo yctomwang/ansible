@@ -122,6 +122,9 @@
     shell: ~/custom_shell
   register: user_creation_result  # This line captures the output
 
-- name: Print the user creation result
-  debug:
-    msg: "{{ user_creation_result }}"  # This line prints the output
+- name: Assert that the user was not changed on subsequent runs
+  assert:
+    that:
+      - user_creation_result is not changed
+    success_msg: "Success: User was not changed."
+    fail_msg: "Failure: User state was changed."
