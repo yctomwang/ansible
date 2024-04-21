@@ -120,7 +120,7 @@
   user:
     name: bob
     shell: ~/custom_shell
-#  register: user_creation_result  # This line captures the output
+  register: user_creation_result  # This line captures the output
 
 - name: Print the user creation result
   debug:
