@@ -916,10 +916,7 @@ class User(object):
             cmd.append(self.home)
             if self.move_home:
                 cmd.append('-m')
-        if self.shell is None:
-            print(2/0)
         if self.shell is not None and info[6] != self.shell:
-            print(1 / 0)
             cmd.append('-s')
             cmd.append(self.shell)
         # if self.shell is not None:
