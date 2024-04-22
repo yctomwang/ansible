@@ -74,7 +74,7 @@ options:
               Since Ansible 2.5, the default shell for non-system users on macOS is V(/bin/bash).
             - On other operating systems, the default shell is determined by the underlying tool
               invoked by this module. See Notes for a per platform list of invoked tools.
-        type: path
+        type: str
     home:
         description:
             - Optionally set the user's home directory.
@@ -916,9 +916,12 @@ class User(object):
             cmd.append(self.home)
             if self.move_home:
                 cmd.append('-m')
-        if self.shell is not None and info[6] != self.shell:
-            cmd.append('-s')
-            cmd.append(self.shell)
+
+        if self.shell is not None:
+            expanded_shell = os.path.expanduser(self.shell)
+            if info[6] != expanded_shell:
+                cmd.append('-s')
+                cmd.append*expanded_shell
 
         if self.expires is not None:
 
@@ -3114,7 +3117,7 @@ def main():
             groups=dict(type='list', elements='str'),
             comment=dict(type='str'),
             home=dict(type='path'),
-            shell=dict(type='path'),
+            shell=dict(type='str'),
             password=dict(type='str', no_log=True),
             login_class=dict(type='str'),
             password_expire_max=dict(type='int', no_log=False),
