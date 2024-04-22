@@ -78,17 +78,17 @@
       - "'RealName: ansibulluser' in user_test2.stdout_lines "
       - "'PrimaryGroupID: 20' in user_test2.stdout_lines "
 
+#https://github.com/ansible/ansible/issues/82490
 - name: Create a new user with custom shell to test ~ expansion
   user:
     name: bob
     shell: ~/custom_shell
-#  register: user_creation_result  # This line captures the output
 
 - name: Create a new user with custom shell to test ~ expansion second time should show ok not changed
   user:
     name: bob
     shell: ~/custom_shell
-  register: user_creation_result  # This line captures the output
+  register: user_creation_result
 
 - name: Assert that the user was not changed on subsequent runs
   assert:
