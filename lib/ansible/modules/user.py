@@ -921,7 +921,7 @@ class User(object):
             expanded_shell = os.path.expanduser(self.shell)
             if info[6] != expanded_shell:
                 cmd.append('-s')
-                cmd.append*expanded_shell
+                cmd.append(expanded_shell)
 
         if self.expires is not None:
 
