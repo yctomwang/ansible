@@ -628,10 +628,10 @@
 #    repo: https://github.com/timofurrer/try
 #    version: master
 #    dest: /checkout-dir
-
-- name: Run ansible venv TEST TEST TEST
+#https://github.com/ansible/ansible/issues/81522
+- name: Unable to find pip in the virtualenv when using relative path
   pip:
-    chdir: checkout-dir
+    chdir: checkout-dir # a relative path
     requirements: "{{ remote_tmp_dir}}/pipreq.txt" #we dont care about what we are trying to pip
     virtualenv: venv
     virtualenv_command: python3 -m venv
@@ -640,3 +640,7 @@
 - name: Print output of the pip task
   debug:
     msg: "{{ pip_output }}"  # Using the debug module to print the registered variable
+- assert:
+    that:
+      - pip_output is successful
+      - '"fallible==0.0.1a2" in pip_prereleases.stdout_lines'
