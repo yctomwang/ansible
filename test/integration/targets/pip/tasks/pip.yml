@@ -623,16 +623,18 @@
         - '"fallible==0.0.1a2" in pip_prereleases.stdout_lines'
 
 #
+- name: Test virtualenv command with arguments
+  when: ansible_python.version.major == 2
+  block:
+  - name: Run git checkout  TEST TEST TEST
+    git:
+      repo: https://github.com/timofurrer/try
+      version: master
+      dest: /checkout-dir
 
-- name: Run git checkout  TEST TEST TEST
-  git:
-    repo: https://github.com/timofurrer/try
-    version: master
-    dest: /checkout-dir
-
-- name: Run ansible venv TEST TEST TEST
-- pip:
-    chdir: checkout-dir
-    requirements: requirements.txt
-    virtualenv: venv
-    virtualenv_command: python3 -m venv
+  - name: Run ansible venv TEST TEST TEST
+    pip:
+      chdir: checkout-dir
+      requirements: requirements.txt
+      virtualenv: venv
+      virtualenv_command: python3 -m venv
