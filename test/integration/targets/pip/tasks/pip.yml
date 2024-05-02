@@ -643,4 +643,4 @@
 - assert:
     that:
       - pip_output is successful
-      - '"fallible==0.0.1a2" in pip_prereleases.stdout_lines'
+      - '"checkout-dir/venv" in pip_output.virtualenv'
