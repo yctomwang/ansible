@@ -632,6 +632,6 @@
 - name: Run ansible venv TEST TEST TEST
   pip:
     chdir: checkout-dir
-    requirements: requirements.txt
+    requirements: "{{ remote_tmp_dir}}/pipreq.txt"
     virtualenv: venv
     virtualenv_command: python3 -m venv
