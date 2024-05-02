@@ -635,3 +635,8 @@
     requirements: "{{ remote_tmp_dir}}/pipreq.txt" #we dont care about what we are trying to pip
     virtualenv: venv
     virtualenv_command: python3 -m venv
+  register: pip_output  # Registering the output of the pip task
+
+- name: Print output of the pip task
+  debug:
+    msg: "{{ pip_output }}"  # Using the debug module to print the registered variable
