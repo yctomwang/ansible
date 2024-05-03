@@ -632,9 +632,9 @@
 - name: Unable to find pip in the virtualenv when using relative path
   pip:
     chdir: checkout-dir # a relative path
-    requirements: "{{ remote_tmp_dir}}/pipreq.txt" #we dont care about what we are trying to pip
+    requirements: "{{ remote_tmp_dir}}/pipreq.txt" #we dont care about what we are trying to install here
     virtualenv: venv
-    virtualenv_command: python3 -m venv
+    virtualenv_command: python -m venv
   register: pip_output  # Registering the output of the pip task
 
 - name: Print output of the pip task
