@@ -52,7 +52,7 @@ ansible-playbook -i inventory "$@" 80981.yml | tee out.txt
 
 
 
-ansible-playbook force_handlers_blocks_81533-2.yml -i inventory.handlers "$@" 2>&1 | tee out.txt
+ansible-playbook 83292.yml -i inventory.handlers "$@" 2>&1 | tee out.txt
 exit_code=$?
 
 # Check if the exit code is 0
