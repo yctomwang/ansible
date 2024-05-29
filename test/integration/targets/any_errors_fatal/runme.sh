@@ -52,4 +52,4 @@ ansible-playbook -i inventory "$@" 80981.yml | tee out.txt
 
 
 
-#ansible-playbook -i inventory "$@" 83292.yml | tee out.txt
+ansible-playbook -i inventory "$@" 83292.yml | tee out.txt
