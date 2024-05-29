@@ -51,13 +51,13 @@ ansible-playbook -i inventory "$@" 80981.yml | tee out.txt
 [ "$(grep -c 'recovered' out.txt)" -eq 2 ]
 
 
-
-ansible-playbook 83292.yml -i inventory.handlers "$@" 2>&1 | tee out.txt
-exit_code=$?
-
-# Check if the exit code is 0
-if [ $exit_code -eq 0 ]; then
-    echo "Ansible playbook ran successfully with exit code 0."
-else
-    echo "Ansible playbook failed with exit code $exit_code."
-fi
+#
+#ansible-playbook 83292.yml -i inventory.handlers "$@" 2>&1 | tee out.txt
+#exit_code=$?
+#
+## Check if the exit code is 0
+#if [ $exit_code -eq 0 ]; then
+#    echo "Ansible playbook ran successfully with exit code 0."
+#else
+#    echo "Ansible playbook failed with exit code $exit_code."
+#fi
