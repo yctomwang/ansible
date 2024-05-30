@@ -52,8 +52,17 @@ ansible-playbook -i inventory "$@" 80981.yml | tee out.txt
 
 
 #
-#ansible-playbook 83292.yml -i inventory.handlers "$@" 2>&1 | tee out.txt
-#exit_code=$?
+ansible-playbook 83292.yml -i inventory.handlers "$@" 2>&1 | tee out.txt
+
+# Capture the exit status of ansible-playbook from the PIPESTATUS array
+ansible_exit_code=${PIPESTATUS[0]}
+
+# Check the exit status of ansible-playbook
+if [ $ansible_exit_code -ne 0 ]; then
+  echo "ansible-playbook failed with exit code $ansible_exit_code"
+else
+  echo "ansible-playbook succeeded"
+fi
 #
 ## Check if the exit code is 0
 #if [ $exit_code -eq 0 ]; then
