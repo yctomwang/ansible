@@ -60,6 +60,7 @@ ansible_exit_code=${PIPESTATUS[0]}
 # Check the exit status of ansible-playbook
 if [ $ansible_exit_code -ne 0 ]; then
   echo "ansible-playbook failed with exit code $ansible_exit_code"
+  exit 1
 else
   echo "ansible-playbook succeeded"
 fi
