@@ -52,7 +52,7 @@ ansible-playbook -i inventory "$@" 80981.yml | tee out.txt
 
 
 #
-ansible-playbook 83292.yml -i inventory.handlers "$@" 2>&1 | tee out.txt
+ansible-playbook -i inventory "$@" 83292.yml | tee out.txt
 
 # Capture the exit status of ansible-playbook from the PIPESTATUS array
 ansible_exit_code=${PIPESTATUS[0]}
