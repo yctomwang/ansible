@@ -10,13 +10,14 @@ from unittest.mock import MagicMock
 
 
 def test_display_with_fake_cowsay_binary(capsys, mocker):
-    display = Display()
-
     mocker.patch("ansible.constants.ANSIBLE_COW_PATH", "./cowsay.sh")
 
     mock_popen = MagicMock()
     mock_popen.return_value.returncode = 1
     mocker.patch("subprocess.Popen", mock_popen)
+    display = Display()
+
+
 
     assert not hasattr(display, "cows_available")
     assert display.b_cowsay is None
@@ -29,8 +30,8 @@ def test_display_with_fake_cowsay_binary2(mocker):
     mock_popen.return_value.returncode = 1
     mocker.patch('subprocess.Popen', return_value=mock_popen)
 
-    # Optionally mock os.path.exists if it affects the test outcome
-    mocker.patch('os.path.exists', return_value=False)
+    # # Optionally mock os.path.exists if it affects the test outcome
+    # mocker.patch('os.path.exists', return_value=False)
 
     # Ensure C.ANSIBLE_COW_PATH does not return a valid path
     mocker.patch('ansible.constants.ANSIBLE_COW_PATH', new_callable=mocker.PropertyMock, return_value=None)
