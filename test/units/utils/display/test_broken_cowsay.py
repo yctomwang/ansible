@@ -40,3 +40,4 @@ def test_display_with_fake_cowsay_binary2(mocker):
 
     # Assert 'cows_available' attribute should not be set
     assert not hasattr(display, 'cows_available'), "cows_available should not be set if cowsay command fails"
+    assert display.b_cowsay is None
