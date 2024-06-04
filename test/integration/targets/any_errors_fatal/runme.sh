@@ -52,7 +52,7 @@ ansible-playbook -i inventory "$@" 80981.yml | tee out.txt
 
 ansible-playbook -i inventory "$@" 83292.yml | tee out.txt
 [ "$(grep -c 'SHOULD NOT HAPPEN' out.txt)" -eq 0 ]
-[ "$(grep -c 'rescued' out.txt)" -eq 2 ]
+[ "$(grep -c 'rescuedd' out.txt)" -eq 2 ]
 [ "$(grep -c 'recovered' out.txt)" -eq 2 ]
 
 ## Capture the exit status of ansible-playbook from the PIPESTATUS array
