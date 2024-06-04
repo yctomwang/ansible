@@ -14,7 +14,7 @@
       rescue:
         - name: Rescues both hosts
           debug:
-            msg: rescue
+            msg: rescued
     - name: You can recover from fatal errors by adding a rescue section to the block.
       debug:
         msg: recovered
