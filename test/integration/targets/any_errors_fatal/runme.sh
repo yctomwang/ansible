@@ -56,7 +56,7 @@ ansible-playbook -i inventory "$@" 83292.yml | tee out.txt
 [ "$(grep -c 'recovered' out.txt)" -eq 2 ]
 
 
-ansible-playbook -i inventory "$@" 83292_2.yml | tee out.txt
+ansible-playbook -i inventory "$@" 83292_2.yml -vvvv | tee out.txt
 [ "$(grep -c 'SHOULD NOT HAPPEN' out.txt)" -eq 0 ]
 [ "$(grep -c 'rescuedd' out.txt)" -eq 2 ]
 [ "$(grep -c 'recovered' out.txt)" -eq 2 ]
