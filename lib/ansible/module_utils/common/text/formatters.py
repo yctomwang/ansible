@@ -99,7 +99,7 @@ def human_to_bytes(number, default_unit=None, isbits=False):
         if range_key == 'B':
             expect_message = 'expect %s or %s' % (unit_class, unit_class_name)
         unit_group = VALID_UNITS.get(range_key)
-        if unit.lower == unit_group[1 if isbits else 0][0]:
+        if unit.lower()== unit_group[1 if isbits else 0][0]:
             pass
         elif unit != unit_group[1 if isbits else 0][1]:
             raise ValueError("human_to_bytes() failed to convert %s. Value is not a valid string (%s)" % (number, expect_message))
