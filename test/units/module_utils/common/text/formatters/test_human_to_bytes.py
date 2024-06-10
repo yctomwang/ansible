@@ -183,6 +183,7 @@ def test_human_to_bytes_isbits_wrong_default_unit(test_input, unit, isbits):
     with pytest.raises(ValueError, match="Value is not a valid string"):
         human_to_bytes(test_input, default_unit=unit, isbits=isbits)
 
+
 @pytest.mark.parametrize(
     'test_input,expected',
     [
@@ -199,6 +200,7 @@ def test_human_to_bytes_nonsensical_inputs_first_two_letter_unit(test_input, exp
     with pytest.raises(ValueError, match=expected):
         human_to_bytes(test_input)
 
+
 @pytest.mark.parametrize(
     'test_input,expected',
     [
@@ -207,7 +209,7 @@ def test_human_to_bytes_nonsensical_inputs_first_two_letter_unit(test_input, exp
         ('- |\n   1\n   kB', "can't interpret following string"),
         ('          12', "can't interpret following string"),
         (' 12 MB', "can't interpret following string"),  # OGHAM SPACE MARK
-        ('1​000 MB', "can't interpret following string")  # U+200B zero-width space after 1
+        ('1\u200B000 MB', "can't interpret following string")  # U+200B zero-width space after 1
 
     ]
 )
@@ -216,6 +218,7 @@ def test_human_to_bytes_non_number_truncate_result(test_input, expected):
     truncating result"""
     with pytest.raises(ValueError, match=expected):
         human_to_bytes(test_input)
+
 
 @pytest.mark.parametrize(
     'test_input,expected',
@@ -236,6 +239,7 @@ def test_human_to_bytes_nonsensical(test_input, expected):
     with pytest.raises(ValueError, match=expected):
         human_to_bytes(test_input)
 
+
 @pytest.mark.parametrize(
     'test_input,expected',
     [
@@ -250,4 +254,3 @@ def test_human_to_bytes_non_ascii_number(test_input, expected):
     """Test of human_to_bytes function,correctly filtering out non ASCII characters"""
     with pytest.raises(ValueError, match=expected):
         human_to_bytes(test_input)
-

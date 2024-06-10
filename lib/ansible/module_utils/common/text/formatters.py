@@ -32,6 +32,7 @@ VALID_UNITS = {
     'Y': (('yottabyte', 'YB'), ('yottabit', 'Yb')),
 }
 
+
 def lenient_lowercase(lst):
     """Lowercase elements of a list.
 
