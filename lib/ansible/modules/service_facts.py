@@ -341,7 +341,6 @@ class SystemctlScanService(BaseService):
         return is_systemd_managed(self.module)
 
     def _list_from_units(self, systemctl_path, services):
-
         # list units as systemd sees them
         rc, stdout, stderr = self.module.run_command("%s list-units --no-pager --type service --all" % systemctl_path,
                                                      use_unsafe_shell=True)
@@ -373,7 +372,6 @@ class SystemctlScanService(BaseService):
                 }
 
     def _list_from_unit_files(self, systemctl_path, services):
-
         # now try unit files for complete picture and final 'status'
         rc, stdout, stderr = self.module.run_command(
             "%s list-unit-files --no-pager --type service --all" % systemctl_path, use_unsafe_shell=True)
@@ -412,17 +410,18 @@ class SystemctlScanService(BaseService):
                 enabled_status = 'unknown'
                 if rc == 0 and stdout:
                     enabled_status = stdout.strip()
+                else:
+                    self.module.debug(
+                        "Failed to get enabled status for service %s: RC: %s, Stderr: %s" % (service_name, rc, stderr))
                 services[service_name]["enabled"] = enabled_status
 
     def gather_services(self):
-
         services = {}
         if self.systemd_enabled():
             systemctl_path = self.module.get_bin_path("systemctl", opt_dirs=["/usr/bin", "/usr/local/bin"])
             if systemctl_path:
                 self._list_from_units(systemctl_path, services)
                 self._list_from_unit_files(systemctl_path, services)
-
         return services
 
 
