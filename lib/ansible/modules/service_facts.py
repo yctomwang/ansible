@@ -410,9 +410,9 @@ class SystemctlScanService(BaseService):
                 enabled_status = 'unknown'
                 if rc == 0 and stdout:
                     enabled_status = stdout.strip()
-                else:
-                    self.module.debug(
-                        "Failed to get enabled status for service %s: RC: %s, Stderr: %s" % (service_name, rc, stderr))
+                elif rc == 1:
+                    enabled_status = 'disabled'
+                self.module.debug("Service: %s, Enabled Status: %s" % (service_name, enabled_status))
                 services[service_name]["enabled"] = enabled_status
 
     def gather_services(self):
