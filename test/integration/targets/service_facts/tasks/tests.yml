@@ -29,8 +29,16 @@
 
 - name: get ansible_test service's state
   debug:
-    var: services['ansible_test.service'].state
+    var: ansible_facts.services['ansible_test.service'].state
+
+- name: get ansible_test service's enabled status
+  debug:
+    var: ansible_facts.services['ansible_test.service'].enabled
 
 - name: ansible_test service's running state should be \"inactive\"
   assert:
-    that: "services['ansible_test.service'].state == 'inactive'"
+    that: "ansible_facts.services['ansible_test.service'].state == 'inactive'"
+
+- name: ansible_test service's enabled status should be \"disabled\"
+  assert:
+    that: "ansible_facts.services['ansible_test.service'].enabled == 'disabled'
