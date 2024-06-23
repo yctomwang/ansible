@@ -42,19 +42,19 @@ options:
         default: "HEAD"
     accept_hostkey:
         description:
-            - Will ensure or not that "-o StrictHostKeyChecking=no" is present as an ssh option.
+            - Will ensure or not that C(-o StrictHostKeyChecking=no) is present as an ssh option.
             - Be aware that this disables a protection against MITM attacks.
-            - Those using OpenSSH >= 7.5 might want to set O(ssh_opts) to V(StrictHostKeyChecking=accept-new)
+            - Those using OpenSSH >= 7.5 might want to use O(accept_newhostkey) or set O(ssh_opts) to V(StrictHostKeyChecking=accept-new)
               instead, it does not remove the MITM issue but it does restrict it to the first attempt.
         type: bool
         default: 'no'
         version_added: "1.5"
     accept_newhostkey:
         description:
-            - As of OpenSSH 7.5, "-o StrictHostKeyChecking=accept-new" can be
+            - As of OpenSSH 7.5, C(-o StrictHostKeyChecking=accept-new) can be
               used which is safer and will only accepts host keys which are
-              not present or are the same. if V(true), ensure that
-              "-o StrictHostKeyChecking=accept-new" is present as an ssh option.
+              not present or are the same. If V(true), ensure that
+              C(-o StrictHostKeyChecking=accept-new) is present as an ssh option.
         type: bool
         default: 'no'
         version_added: "2.12"
@@ -65,21 +65,21 @@ options:
             - For older versions it appends E(GIT_SSH_OPTS) (specific to this module) to the
               variables above or via a wrapper script.
             - Other options can add to this list, like O(key_file) and O(accept_hostkey).
-            - An example value could be "-o StrictHostKeyChecking=no" (although this particular
+            - An example value could be C(-o StrictHostKeyChecking=no) (although this particular
               option is better set by O(accept_hostkey)).
-            - The module ensures that 'BatchMode=yes' is always present to avoid prompts.
+            - The module ensures that C(BatchMode=yes) is always present to avoid prompts.
         type: str
         version_added: "1.5"
 
     key_file:
         description:
             - Specify an optional private key file path, on the target host, to use for the checkout.
-            - This ensures 'IdentitiesOnly=yes' is present in O(ssh_opts).
+            - This ensures C(IdentitiesOnly=yes) is present in O(ssh_opts).
         type: path
         version_added: "1.5"
     reference:
         description:
-            - Reference repository (see "git clone --reference ...").
+            - Reference repository (see C(git clone --reference ...)).
         type: str
         version_added: "1.4"
     remote:
@@ -165,7 +165,7 @@ options:
     track_submodules:
         description:
             - If V(true), submodules will track the latest commit on their
-              master branch (or other branch specified in .gitmodules).  If
+              master branch (or other branch specified in C(.gitmodules)).  If
               V(false), submodules will be kept at the revision specified by the
               main project. This is equivalent to specifying the C(--remote) flag
               to git submodule update.
@@ -235,7 +235,7 @@ notes:
       SSH will prompt user to authorize the first contact with a remote host.  To avoid this prompt,
       one solution is to use the option accept_hostkey. Another solution is to
       add the remote host public key in C(/etc/ssh/ssh_known_hosts) before calling
-      the git module, with the following command: ssh-keyscan -H remote_host.com >> /etc/ssh/ssh_known_hosts."
+      the git module, with the following command: C(ssh-keyscan -H remote_host.com >> /etc/ssh/ssh_known_hosts)."
 '''
 
 EXAMPLES = '''
@@ -500,7 +500,7 @@ def set_git_ssh_env(key_file, ssh_opts, git_version, module):
     # older than 2.3 does not know how to use git_ssh_command,
     # so we force it into get_ssh var
     # https://github.com/gitster/git/commit/09d60d785c68c8fa65094ecbe46fbc2a38d0fc1f
-    if git_version < LooseVersion('2.3.0'):
+    if git_version is not None and git_version < LooseVersion('2.3.0'):
         # for use in wrapper
         os.environ["GIT_SSH_OPTS"] = ssh_opts
 
@@ -913,7 +913,7 @@ def fetch(git_path, module, repo, dest, version, remote, depth, bare, refspec, g
             refspecs = ['+refs/heads/*:refs/heads/*', '+refs/tags/*:refs/tags/*']
         else:
             # ensure all tags are fetched
-            if git_version_used >= LooseVersion('1.9'):
+            if git_version_used is not None and git_version_used >= LooseVersion('1.9'):
                 fetch_cmd.append('--tags')
             else:
                 # old git versions have a bug in --tags that prevents updating existing tags
@@ -1308,7 +1308,7 @@ def main():
     # GIT_SSH=<path> as an environment variable, might create sh wrapper script for older versions.
     set_git_ssh_env(key_file, ssh_opts, git_version_used, module)
 
-    if depth is not None and git_version_used < LooseVersion('1.9.1'):
+    if depth is not None and git_version_used is not None and git_version_used < LooseVersion('1.9.1'):
         module.warn("git version is too old to fully support the depth argument. Falling back to full checkouts.")
         depth = None
 

@@ -71,8 +71,14 @@ NOCOLOR = {
     'PLUGIN': r'[%s]',
 }
 
-# TODO: make configurable
-ref_style = {'MODULE': 'yellow', 'REF': 'magenta', 'LINK': 'cyan', 'DEP': 'magenta', 'CONSTANT': 'dark gray', 'PLUGIN': 'yellow'}
+ref_style = {
+    'MODULE': C.COLOR_DOC_MODULE,
+    'REF': C.COLOR_DOC_REFERENCE,
+    'LINK': C.COLOR_DOC_LINK,
+    'DEP': C.COLOR_DOC_DEPRECATED,
+    'CONSTANT': C.COLOR_DOC_CONSTANT,
+    'PLUGIN': C.COLOR_DOC_PLUGIN,
+}
 
 
 def jdump(text):
@@ -1296,14 +1302,15 @@ class DocCLI(CLI, RoleMixin):
 
             if doc.get('description'):
                 if isinstance(doc['description'], list):
-                    desc = " ".join(doc['description'])
+                    descs = doc['description']
                 else:
-                    desc = doc['description']
-                text.append("%s" % DocCLI.warp_fill(DocCLI.tty_ify(desc), limit, initial_indent=opt_indent, subsequent_indent=opt_indent))
+                    descs = [doc['description']]
+                for desc in descs:
+                    text.append("%s" % DocCLI.warp_fill(DocCLI.tty_ify(desc), limit, initial_indent=opt_indent, subsequent_indent=opt_indent))
                 text.append('')
 
             if doc.get('options'):
-                text.append(_format("Options", 'bold') + " (%s inicates it is required):" % ("=" if C.ANSIBLE_NOCOLOR else 'red'))
+                text.append(_format("Options", 'bold') + " (%s indicates it is required):" % ("=" if C.ANSIBLE_NOCOLOR else 'red'))
                 DocCLI.add_fields(text, doc.pop('options'), limit, opt_indent)
 
             if doc.get('attributes', False):
@@ -1338,6 +1345,17 @@ class DocCLI(CLI, RoleMixin):
                     # use empty indent since this affects the start of the yaml doc, not it's keys
                     text.append(DocCLI._indent_lines(DocCLI._dump_yaml({k.upper(): doc[k]}), ''))
 
+            if doc.get('examples', False):
+                text.append('')
+                text.append(_format("EXAMPLES:", 'bold'))
+                if isinstance(doc['examples'], string_types):
+                    text.append(doc.pop('examples').strip())
+                else:
+                    try:
+                        text.append(yaml_dump(doc.pop('examples'), indent=2, default_flow_style=False))
+                    except Exception as e:
+                        raise AnsibleParserError("Unable to parse examples section", orig_exc=e)
+
         return text
 
     @staticmethod
@@ -1355,12 +1373,13 @@ class DocCLI(CLI, RoleMixin):
         text.append("> %s %s (%s)" % (plugin_type.upper(), _format(doc.pop('plugin_name'), 'bold'), doc.pop('filename')))
 
         if isinstance(doc['description'], list):
-            desc = " ".join(doc.pop('description'))
+            descs = doc.pop('description')
         else:
-            desc = doc.pop('description')
+            descs = [doc.pop('description')]
 
         text.append('')
-        text.append(DocCLI.warp_fill(DocCLI.tty_ify(desc), limit, initial_indent=base_indent, subsequent_indent=base_indent))
+        for desc in descs:
+            text.append(DocCLI.warp_fill(DocCLI.tty_ify(desc), limit, initial_indent=base_indent, subsequent_indent=base_indent))
 
         if display.verbosity > 0:
             doc['added_in'] = DocCLI._format_version_added(doc.pop('version_added', 'historical'), doc.pop('version_added_collection', 'ansible-core'))
@@ -1385,7 +1404,7 @@ class DocCLI(CLI, RoleMixin):
 
         if doc.get('options', False):
             text.append("")
-            text.append(_format("OPTIONS", 'bold') + " (%s inicates it is required):" % ("=" if C.ANSIBLE_NOCOLOR else 'red'))
+            text.append(_format("OPTIONS", 'bold') + " (%s indicates it is required):" % ("=" if C.ANSIBLE_NOCOLOR else 'red'))
             DocCLI.add_fields(text, doc.pop('options'), limit, opt_indent, man=(display.verbosity == 0))
 
         if doc.get('attributes', False):

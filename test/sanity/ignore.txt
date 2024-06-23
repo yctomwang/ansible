@@ -1,21 +1,10 @@
-lib/ansible/cli/scripts/ansible_connection_cli_stub.py shebang
 lib/ansible/config/base.yml no-unwanted-files
 lib/ansible/executor/powershell/async_watchdog.ps1 pslint:PSCustomUseLiteralPath
 lib/ansible/executor/powershell/async_wrapper.ps1 pslint:PSCustomUseLiteralPath
 lib/ansible/executor/powershell/exec_wrapper.ps1 pslint:PSCustomUseLiteralPath
-lib/ansible/galaxy/collection/__init__.py mypy-3.10:attr-defined  # inline ignore has no effect
-lib/ansible/galaxy/collection/__init__.py mypy-3.11:attr-defined  # inline ignore has no effect
-lib/ansible/galaxy/collection/__init__.py mypy-3.12:attr-defined  # inline ignore has no effect
-lib/ansible/galaxy/collection/gpg.py mypy-3.10:arg-type
-lib/ansible/galaxy/collection/gpg.py mypy-3.11:arg-type
-lib/ansible/galaxy/collection/gpg.py mypy-3.12:arg-type
-lib/ansible/parsing/yaml/constructor.py mypy-3.10:type-var  # too many occurrences to ignore inline
-lib/ansible/parsing/yaml/constructor.py mypy-3.11:type-var  # too many occurrences to ignore inline
-lib/ansible/parsing/yaml/constructor.py mypy-3.12:type-var  # too many occurrences to ignore inline
 lib/ansible/keyword_desc.yml no-unwanted-files
 lib/ansible/modules/apt.py validate-modules:parameter-invalid
 lib/ansible/modules/apt_repository.py validate-modules:parameter-invalid
-lib/ansible/modules/assemble.py validate-modules:nonexistent-parameter-documented
 lib/ansible/modules/async_status.py validate-modules!skip
 lib/ansible/modules/async_wrapper.py ansible-doc!skip  # not an actual module
 lib/ansible/modules/async_wrapper.py pylint:ansible-bad-function # ignore, required
@@ -54,9 +43,9 @@ lib/ansible/module_utils/compat/selinux.py import-3.9!skip # pass/fail depends o
 lib/ansible/module_utils/compat/selinux.py import-3.10!skip # pass/fail depends on presence of libselinux.so
 lib/ansible/module_utils/compat/selinux.py import-3.11!skip # pass/fail depends on presence of libselinux.so
 lib/ansible/module_utils/compat/selinux.py import-3.12!skip # pass/fail depends on presence of libselinux.so
+lib/ansible/module_utils/compat/selinux.py import-3.13!skip # pass/fail depends on presence of libselinux.so
 lib/ansible/module_utils/compat/selinux.py pylint:unidiomatic-typecheck
 lib/ansible/module_utils/distro/_distro.py no-assert
-lib/ansible/module_utils/distro/_distro.py pep8!skip # bundled code we don't want to modify
 lib/ansible/module_utils/distro/__init__.py empty-init # breaks namespacing, bundled, do not override
 lib/ansible/module_utils/facts/__init__.py empty-init # breaks namespacing, deprecate and eventually remove
 lib/ansible/module_utils/powershell/Ansible.ModuleUtils.ArgvParser.psm1 pslint:PSUseApprovedVerbs
@@ -170,32 +159,12 @@ test/units/utils/collection_loader/fixtures/collections_masked/ansible_collectio
 test/units/utils/collection_loader/fixtures/collections_masked/ansible_collections/testns/testcoll/__init__.py empty-init  # testing that collections don't need inits
 test/units/utils/collection_loader/test_collection_loader.py pylint:undefined-variable  # magic runtime local var splatting
 test/units/utils/collection_loader/fixtures/collections/ansible_collections/testns/testcoll/plugins/module_utils/my_util.py boilerplate  # test requires missing boilerplate
-.github/CONTRIBUTING.md pymarkdown:line-length
-hacking/backport/README.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/bug_internal_api.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/bug_wrong_repo.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/collections.md pymarkdown:line-length
-hacking/ticket_stubs/collections.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/guide_newbie_about_gh_and_contributing_to_ansible.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/no_thanks.md pymarkdown:line-length
-hacking/ticket_stubs/no_thanks.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/pr_duplicate.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/pr_merged.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/proposal.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/question_not_bug.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/resolved.md pymarkdown:no-bare-urls
-hacking/ticket_stubs/wider_discussion.md pymarkdown:no-bare-urls
-lib/ansible/galaxy/data/apb/README.md pymarkdown:line-length
 lib/ansible/galaxy/data/container/README.md pymarkdown:line-length
 lib/ansible/galaxy/data/default/role/README.md pymarkdown:line-length
 lib/ansible/galaxy/data/network/README.md pymarkdown:line-length
 README.md pymarkdown:line-length
-test/integration/targets/ansible-vault/invalid_format/README.md pymarkdown:no-bare-urls
-test/support/README.md pymarkdown:no-bare-urls
 test/units/cli/test_data/role_skeleton/README.md pymarkdown:line-length
 test/integration/targets/find/files/hello_world.gbk no-smart-quotes
 test/integration/targets/find/files/hello_world.gbk no-unwanted-characters
-lib/ansible/galaxy/collection/__init__.py pylint:ansible-deprecated-version-comment  # 2.18 deprecation
 lib/ansible/plugins/action/__init__.py pylint:ansible-deprecated-version  # 2.18 deprecation
 lib/ansible/template/__init__.py pylint:ansible-deprecated-version  # 2.18 deprecation
-lib/ansible/vars/manager.py pylint:ansible-deprecated-version  # 2.18 deprecation

@@ -19,9 +19,15 @@ description:
 options:
   use_backend:
     description:
-      - By default, this module will select the backend based on the C(ansible_pkg_mgr) fact.
+      - Backend module to use.
     default: "auto"
-    choices: [ auto, yum, yum4, dnf4, dnf5 ]
+    choices:
+        auto: Automatically select the backend based on the C(ansible_facts.pkg_mgr) fact.
+        yum: Alias for V(auto) (see Notes)
+        dnf: M(ansible.builtin.dnf)
+        yum4: Alias for V(dnf)
+        dnf4: Alias for V(dnf)
+        dnf5: M(ansible.builtin.dnf5)
     type: str
     version_added: 2.15
   name:
@@ -49,14 +55,14 @@ options:
   state:
     description:
       - Whether to install (V(present), V(latest)), or remove (V(absent)) a package.
-      - Default is V(None), however in effect the default action is V(present) unless the O(autoremove) option is
-        enabled for this module, then V(absent) is inferred.
+      - Default is V(None), however in effect the default action is V(present) unless the O(autoremove=true),
+        then V(absent) is inferred.
     choices: ['absent', 'present', 'installed', 'removed', 'latest']
     type: str
 
   enablerepo:
     description:
-      - I(Repoid) of repositories to enable for the install/update operation.
+      - C(Repoid) of repositories to enable for the install/update operation.
         These repos will not persist beyond the transaction.
         When specifying multiple repos, separate them with a ",".
     type: list
@@ -65,9 +71,9 @@ options:
 
   disablerepo:
     description:
-      - I(Repoid) of repositories to disable for the install/update operation.
+      - C(Repoid) of repositories to disable for the install/update operation.
         These repos will not persist beyond the transaction.
-        When specifying multiple repos, separate them with a ",".
+        When specifying multiple repos, separate them with a C(,).
     type: list
     elements: str
     default: []
@@ -80,7 +86,7 @@ options:
   disable_gpg_check:
     description:
       - Whether to disable the GPG checking of signatures of packages being
-        installed. Has an effect only if O(state) is V(present) or V(latest).
+        installed. Has an effect only if O(state=present) or O(state=latest).
       - This setting affects packages installed from a repository as well as
         "local" packages installed from the filesystem or a URL.
     type: bool
@@ -105,13 +111,13 @@ options:
     description:
       - If V(true), removes all "leaf" packages from the system that were originally
         installed as dependencies of user-installed packages but which are no longer
-        required by any such package. Should be used alone or when O(state) is V(absent)
+        required by any such package. Should be used alone or when O(state=absent).
     type: bool
     default: "no"
     version_added: "2.4"
   exclude:
     description:
-      - Package name(s) to exclude when state=present, or latest. This can be a
+      - Package name(s) to exclude when O(state=present), or latest. This can be a
         list or a comma separated string.
     version_added: "2.7"
     type: list
@@ -120,14 +126,14 @@ options:
   skip_broken:
     description:
       - Skip all unavailable packages or packages with broken dependencies
-        without raising an error. Equivalent to passing the --skip-broken option.
+        without raising an error. Equivalent to passing the C(--skip-broken) option.
     type: bool
     default: "no"
     version_added: "2.7"
   update_cache:
     description:
       - Force dnf to check if cache is out of date and redownload if needed.
-        Has an effect only if O(state) is V(present) or V(latest).
+        Has an effect only if O(state=present) or O(state=latest).
     type: bool
     default: "no"
     aliases: [ expire-cache ]
@@ -135,7 +141,7 @@ options:
   update_only:
     description:
       - When using latest, only update installed packages. Do not install packages.
-      - Has an effect only if O(state) is V(latest)
+      - Has an effect only if O(state=present) or O(state=latest).
     default: "no"
     type: bool
     version_added: "2.7"
@@ -155,7 +161,7 @@ options:
     version_added: "2.7"
   enable_plugin:
     description:
-      - I(Plugin) name to enable for the install/update operation.
+      - C(Plugin) name to enable for the install/update operation.
         The enabled plugin will not persist beyond the transaction.
     version_added: "2.7"
     type: list
@@ -163,7 +169,7 @@ options:
     default: []
   disable_plugin:
     description:
-      - I(Plugin) name to disable for the install/update operation.
+      - C(Plugin) name to disable for the install/update operation.
         The disabled plugins will not persist beyond the transaction.
     version_added: "2.7"
     type: list
@@ -173,13 +179,14 @@ options:
     description:
       - Disable the excludes defined in DNF config files.
       - If set to V(all), disables all excludes.
-      - If set to V(main), disable excludes defined in [main] in dnf.conf.
+      - If set to V(main), disable excludes defined in C([main]) in C(dnf.conf).
       - If set to V(repoid), disable excludes defined for given repo id.
     version_added: "2.7"
     type: str
   validate_certs:
     description:
-      - This only applies if using a https url as the source of the rpm. e.g. for localinstall. If set to V(false), the SSL certificates will not be validated.
+      - This only applies if using a https url as the source of the rpm. For example, for localinstall.
+        If set to V(false), the SSL certificates will not be validated.
       - This should only set to V(false) used on personally controlled sites using self-signed certificates as it avoids verifying the source site.
     type: bool
     default: "yes"
@@ -195,7 +202,7 @@ options:
     description:
       - Specify if the named package and version is allowed to downgrade
         a maybe already installed higher version of that package.
-        Note that setting allow_downgrade=True can make this module
+        Note that setting O(allow_downgrade=true) can make this module
         behave in a non-idempotent way. The task could end up with a set
         of packages that does not match the complete list of specified
         packages to install (because dependencies between the downgraded
@@ -238,7 +245,7 @@ options:
     version_added: "2.8"
   allowerasing:
     description:
-      - If V(true) it allows  erasing  of  installed  packages to resolve dependencies.
+      - If V(true) it allows erasing of installed packages to resolve dependencies.
     required: false
     type: bool
     default: "no"
@@ -282,11 +289,16 @@ attributes:
     platform:
         platforms: rhel
 notes:
-  - When used with a C(loop:) each package will be processed individually, it is much more efficient to pass the list directly to the I(name) option.
+  - When used with a C(loop:) each package will be processed individually, it is much more efficient to pass the list directly to the O(name) option.
   - Group removal doesn't work if the group was installed with Ansible because
     upstream dnf's API doesn't properly mark groups as installed, therefore upon
     removal the module is unable to detect that the group is installed
-    (https://bugzilla.redhat.com/show_bug.cgi?id=1620324)
+    U(https://bugzilla.redhat.com/show_bug.cgi?id=1620324).
+  - While O(use_backend=yum) and the ability to call the action plugin as
+    M(ansible.builtin.yum) are provided for syntax compatibility, the YUM
+    backend was removed in ansible-core 2.17 because the required libraries are
+    not available for any supported version of Python. If you rely on this
+    functionality, use an older version of Ansible.
 requirements:
   - python3-dnf
   - for the autoremove option you need dnf >= 2.0.1"
@@ -919,7 +931,7 @@ class DnfModule(YumDnf):
                 else:
                     return True         # No stream provided, but module found
 
-        return False  # seems like a sane default
+        return False  # seems like a logical default
 
     def ensure(self):
 
@@ -1339,7 +1351,7 @@ def main():
     #   list=repos
     #   list=pkgspec
 
-    yumdnf_argument_spec['argument_spec']['use_backend'] = dict(default='auto', choices=['auto', 'yum', 'yum4', 'dnf4', 'dnf5'])
+    yumdnf_argument_spec['argument_spec']['use_backend'] = dict(default='auto', choices=['auto', 'dnf', 'yum', 'yum4', 'dnf4', 'dnf5'])
 
     module = AnsibleModule(
         **yumdnf_argument_spec

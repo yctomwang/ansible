@@ -458,7 +458,7 @@ class AnsibleModule(object):
         self._selinux_mls_enabled = None
         self._selinux_initial_context = None
 
-        # finally, make sure we're in a sane working dir
+        # finally, make sure we're in a logical working dir
         self._set_cwd()
 
     @property
@@ -1353,9 +1353,10 @@ class AnsibleModule(object):
         Find system executable in PATH.
 
         :param arg: The executable to find.
-        :param required: if executable is not found and required is ``True``, fail_json
+        :param required: if the executable is not found and required is ``True``, fail_json
         :param opt_dirs: optional list of directories to search in addition to ``PATH``
-        :returns: if found return full path; otherwise return None
+        :returns: if found return full path; otherwise return original arg, unless 'warning' then return None
+        :raises: Sysexit: if arg is not found and required=True (via fail_json)
         '''
 
         bin_path = None
@@ -1364,8 +1365,6 @@ class AnsibleModule(object):
         except ValueError as e:
             if required:
                 self.fail_json(msg=to_text(e))
-            else:
-                return bin_path
 
         return bin_path
 
@@ -2054,7 +2053,7 @@ class AnsibleModule(object):
                 # not as exact as above, but should be good enough for most platforms that fail the previous call
                 buffer_size = select.PIPE_BUF
             except Exception:
-                buffer_size = 9000  # use sane default JIC
+                buffer_size = 9000  # use logical default JIC
 
         return buffer_size
 
