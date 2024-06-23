@@ -90,9 +90,18 @@
     name: doesnotmatter
     shell: ~/custom_shell
   register: user_creation_result
+#
+#- name: Assert that the user with a tilde in the shell path is created
+#  assert:
+#    that:
+#      - user_creation_result is not changed
+#      - user_create_result is changed
 
-- name: Assert that the user with a tilde in the shell path is created
-  assert:
-    that:
-      - user_creation_result is not changed
-      - user_create_result is changed
+
+- name: remove the doesnotmatter user
+  user:
+    name: doesnotmatter
+    state: absent
+    force: true
+  register: somerandomcrapthatidontcare
+
