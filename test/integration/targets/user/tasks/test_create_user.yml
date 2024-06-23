@@ -97,11 +97,11 @@
       - user_creation_result is not changed
       - user_create_result is changed
 
-
-- name: remove the doesnotmatter user
-  user:
-    name: doesnotmatter
-    state: absent
-    force: true
-  register: somerandomcrapthatidontcare
+#
+#- name: remove the doesnotmatter user
+#  user:
+#    name: doesnotmatter
+#    state: absent
+#    force: true
+#  register: somerandomcrapthatidontcare
 
