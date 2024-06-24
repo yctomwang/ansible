@@ -639,37 +639,37 @@
 - name: Install multiple packages as editable
   pip:
     name:
-      - git+https://github.com/foo/foo#egg=foo
-      - git+https://github.com/bar/bar#egg=bar
+      - "git+https://github.com/pallets/flask#egg=flask"
+      - "git+https://github.com/requests/requests#egg=requests"
     editable: true
     virtualenv: "{{ remote_tmp_dir }}/venv_editable_test"
   register: install_editable
 
-- name: Verify 'foo' package is installed as editable
-  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show -f foo"
-  register: foo_result_editable
-  failed_when: "foo_result_editable.rc != 0"
+- name: Verify 'flask' package is installed as editable
+  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show -f flask"
+  register: flask_result_editable
+  failed_when: "flask_result_editable.rc != 0"
 
-- name: Verify 'bar' package is installed as editable
-  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show -f bar"
-  register: bar_result_editable
-  failed_when: "bar_result_editable.rc != 0"
+- name: Verify 'requests' package is installed as editable
+  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show -f requests"
+  register: requests_result_editable
+  failed_when: "requests_result_editable.rc != 0"
 
-- name: Debug 'foo' result for editable install
+- name: Debug 'flask' result for editable install
   debug:
-    msg: "{{ foo_result_editable.stdout_lines }}"
+    msg: "{{ flask_result_editable.stdout_lines }}"
 
-- name: Debug 'bar' result for editable install
+- name: Debug 'requests' result for editable install
   debug:
-    msg: "{{ bar_result_editable.stdout_lines }}"
+    msg: "{{ requests_result_editable.stdout_lines }}"
 
-- name: Fail if 'foo' is not installed as editable
+- name: Fail if 'flask' is not installed as editable
   fail:
-    msg: "'foo' is not installed as editable"
-  when: "'Location: {{ remote_tmp_dir }}/venv_editable_test/src/foo' not in foo_result_editable.stdout"
+    msg: "'flask' is not installed as editable"
+  when: "'Location: {{ remote_tmp_dir }}/venv_editable_test/src/flask' not in flask_result_editable.stdout"
 
-- name: Fail if 'bar' is not installed as editable
+- name: Fail if 'requests' is not installed as editable
   fail:
-    msg: "'bar' is not installed as editable"
-  when: "'Location: {{ remote_tmp_dir }}/venv_editable_test/src/bar' not in bar_result_editable.stdout"
+    msg: "'requests' is not installed as editable"
+  when: "'Location: {{ remote_tmp_dir }}/venv_editable_test/src/requests' not in requests_result_editable.stdout"
 
