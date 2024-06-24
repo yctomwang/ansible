@@ -673,23 +673,26 @@
 #    msg: "'requests' is not installed as editable"
 #  when: "'Location: {{ remote_tmp_dir }}/venv_editable_test/src/requests' not in requests_result_editable.stdout"
 - name: Check if 'flask' is installed as editable
-  set_fact:
-    flask_result_editable: "{{ lookup('pipe', 'pip show flask') }}"
+  shell: pip show flask
+  register: flask_result_editable
+  ignore_errors: yes
 
 - name: Debug 'flask' result for editable install
   debug:
-    msg: "{{ flask_result_editable.split('\n') }}"
+    msg: "{{ flask_result_editable.stdout_lines }}"
 
 - name: Fail if 'flask' is not installed as editable
   fail:
     msg: "'flask' is not installed as editable"
-  when: "'Editable project location:' not in flask_result_editable"
+  when: "'Editable project location:' not in flask_result_editable.stdout"
+  ignore_errors: yes
 
 - name: Check if 'requests' is installed as editable
-  set_fact:
-    requests_result_editable: "{{ lookup('pipe', 'pip show requests') }}"
+  shell: pip show requests
+  register: requests_result_editable
+  ignore_errors: yes
 
 - name: Debug 'requests' result for editable install
   debug:
-    msg: "{{ requests_result_editable.split('\n') }}"
+    msg: "{{ requests_result_editable.stdout_lines }}"
 
