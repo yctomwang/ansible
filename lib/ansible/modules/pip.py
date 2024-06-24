@@ -810,8 +810,9 @@ def main():
         if name:
             for p in packages:
                 if editable_flag:
-                    cmd.append(editable_flag)
-                cmd.append(to_native(p))
+                    cmd.extend([editable_flag, to_native(p)])
+                else:
+                    cmd.append(to_native(p))
         elif requirements:
             cmd.extend(['-r', requirements])
         else:
