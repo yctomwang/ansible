@@ -813,7 +813,7 @@ def main():
 
         if name:
             for p in packages:
-                if '-e' not in args_list:
+                if '-e' not in cmd and editable:
                     cmd.append('-e')
                 cmd.append(to_native(p))
         elif requirements:
