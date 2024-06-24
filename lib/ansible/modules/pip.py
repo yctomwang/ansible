@@ -820,7 +820,7 @@ def main():
                 changed=False,
                 warnings=["No valid name or requirements file found."],
             )
-
+        module.debug("Full command: {}".format(' '.join(cmd)))
 
         if module.check_mode:
             if extra_args or requirements or state == 'latest' or not name:
