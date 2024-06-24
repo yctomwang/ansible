@@ -814,7 +814,7 @@ def main():
         if name:
             for p in packages:
                 if editable:
-                    cmd.append('-e')
+                    # cmd.append('-e')
                 cmd.append(to_native(p))
         elif requirements:
             cmd.extend(['-r', requirements])
