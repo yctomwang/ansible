@@ -622,7 +622,7 @@
         - pip_prereleases is not changed
         - '"fallible==0.0.1a2" in pip_prereleases.stdout_lines'
 
- Ensure multiple packages are installed as editable using virtualenv_command
+# Ensure multiple packages are installed as editable using virtualenv_command
 
 - name: Ensure packages are not installed (precondition setup)
   pip:
