@@ -624,19 +624,28 @@
 
 # Ensure multiple packages are installed as editable using virtualenv_command
 
-- name: Create a virtual environment for editable install test
-  file:
-    state: absent
-    name: "{{ remote_tmp_dir }}/venv_editable_test"
-
-- name: Ensure the virtual environment is created
+- name: Ensure packages are not installed (precondition setup)
   pip:
-    name: virtualenv
-    virtualenv: "{{ remote_tmp_dir }}/venv_editable_test"
-    virtualenv_command: "{{ ansible_python_interpreter ~ ' -m venv' }}"
-  register: venv_editable_test
+    name: "{{ pip_test_packages }}"
+    state: absent
 
-- name: Install multiple packages as editable
+- name: Ensure packages are not installed
+  pip:
+    name: "{{ pip_test_packages }}"
+    state: absent
+  register: uninstall_result
+
+- name: Removing unremoved packages should return unchanged
+  assert:
+    that:
+       - "not (uninstall_result is changed)"
+
+- command: "{{ ansible_python.executable }} -c 'import {{ item }}'"
+  register: absent_result
+  failed_when: "absent_result.rc == 0"
+  loop: '{{ pip_test_modules }}'
+
+- name: Ensure packages are installed as editable
   pip:
     name:
       - "git+https://github.com/pallets/flask#egg=flask"
@@ -645,54 +654,43 @@
     virtualenv: "{{ remote_tmp_dir }}/venv_editable_test"
   register: install_editable
 
-#- name: Verify 'flask' package is installed as editable
-#  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show -f flask"
-#  register: flask_result_editable
-#  failed_when: "flask_result_editable.rc != 0"
-#
-#- name: Verify 'requests' package is installed as editable
-#  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show -f requests"
-#  register: requests_result_editable
-#  failed_when: "requests_result_editable.rc != 0"
-#
-#- name: Debug 'flask' result for editable install
-#  debug:
-#    msg: "{{ flask_result_editable.stdout_lines }}"
-#
-#- name: Debug 'requests' result for editable install
-#  debug:
-#    msg: "{{ requests_result_editable.stdout_lines }}"
-#
-#- name: Fail if 'flask' is not installed as editable
-#  fail:
-#    msg: "'flask' is not installed as editable"
-#  when: "'Location: {{ remote_tmp_dir }}/venv_editable_test/src/flask' not in flask_result_editable.stdout"
-#
-#- name: Fail if 'requests' is not installed as editable
-#  fail:
-#    msg: "'requests' is not installed as editable"
-#  when: "'Location: {{ remote_tmp_dir }}/venv_editable_test/src/requests' not in requests_result_editable.stdout"
+- name: Verify we recorded a change
+  assert:
+    that:
+      - "install_editable is changed"
+
+- name: List all installed packages in the virtual environment
+  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip list"
+  register: pip_list
+  changed_when: false
+
+- name: Debug installed packages
+  debug:
+    msg: "{{ pip_list.stdout_lines }}"
+
 - name: Check if 'flask' is installed as editable
-  shell: pip show flask
-  register: flask_result_editable
+  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show flask"
+  register: flask_result
   ignore_errors: yes
+  changed_when: false
 
 - name: Debug 'flask' result for editable install
   debug:
-    msg: "{{ flask_result_editable.stdout_lines }}"
+    msg: "{{ flask_result.stdout_lines }}"
 
 - name: Fail if 'flask' is not installed as editable
   fail:
     msg: "'flask' is not installed as editable"
-  when: "'Editable project location:' not in flask_result_editable.stdout"
-  ignore_errors: yes
+  when: flask_result.rc == 0 and 'Editable project location:' not in flask_result.stdout
 
 - name: Check if 'requests' is installed as editable
-  shell: pip show requests
-  register: requests_result_editable
+  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show requests"
+  register: requests_result
   ignore_errors: yes
+  changed_when: false
 
 - name: Debug 'requests' result for editable install
   debug:
-    msg: "{{ requests_result_editable.stdout_lines }}"
+    msg: "{{ requests_result.stdout_lines }}"
+
 
