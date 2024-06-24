@@ -795,13 +795,9 @@ def main():
                 packages[0] = Package(to_native(packages[0]), version)
 
         if module.params['editable']:
-            args_list = []  # used if extra_args is not used at all
-            if extra_args:
-                args_list = extra_args.split(' ')
-            if '-e' not in args_list:
-                args_list.append('-e')
-                # Ok, we will reconstruct the option string
-                extra_args = ' '.join(args_list)
+            editable_flag = '-e'
+        else:
+            editable_flag = None
 
         if extra_args:
             cmd.extend(shlex.split(extra_args))
@@ -813,8 +809,8 @@ def main():
 
         if name:
             for p in packages:
-                if '-e' not in cmd and editable:
-                    cmd.append('-e')
+                if editable_flag:
+                    cmd.append(editable_flag)
                 cmd.append(to_native(p))
         elif requirements:
             cmd.extend(['-r', requirements])
@@ -823,6 +819,7 @@ def main():
                 changed=False,
                 warnings=["No valid name or requirements file found."],
             )
+
 
         if module.check_mode:
             if extra_args or requirements or state == 'latest' or not name:
