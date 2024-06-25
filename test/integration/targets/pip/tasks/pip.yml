@@ -671,13 +671,17 @@
 - name: Check if 'flask' is installed as editable using pip list
   assert:
     that:
-      - "'Flask' in list_installed_packages.stdout"
-      - "'/tmp/ansible.uul2o1wj.test/venv_editable_test/src/flask' in list_installed_packages.stdout"
+      - "item.startswith('Flask') and '/src/flask' in item"
+  loop: "{{ list_installed_packages.stdout_lines }}"
 
 - name: Verify 'flask' editable installation directory exists
   stat:
-    path: "{{ remote_tmp_dir }}/venv_editable_test/src/flask"
+    path: "{{ item.split()[-1] }}"
   register: flask_editable_dir
+  when: "item.startswith('Flask') and '/src/flask' in item"
+  loop: "{{ list_installed_packages.stdout_lines }}"
+  loop_control:
+    label: "{{ item.split()[-1] }}"
 
 - name: Fail if 'flask' is not installed as editable
   fail:
@@ -687,16 +691,19 @@
 - name: Check if 'requests' is installed as editable using pip list
   assert:
     that:
-      - "'requests' in list_installed_packages.stdout"
-      - "'/tmp/ansible.uul2o1wj.test/venv_editable_test/src/requests' in list_installed_packages.stdout"
+      - "item.startswith('requests') and '/src/requests' in item"
+  loop: "{{ list_installed_packages.stdout_lines }}"
 
 - name: Verify 'requests' editable installation directory exists
   stat:
-    path: "{{ remote_tmp_dir }}/venv_editable_test/src/requests"
+    path: "{{ item.split()[-1] }}"
   register: requests_editable_dir
+  when: "item.startswith('requests') and '/src/requests' in item"
+  loop: "{{ list_installed_packages.stdout_lines }}"
+  loop_control:
+    label: "{{ item.split()[-1] }}"
 
 - name: Fail if 'requests' is not installed as editable
   fail:
     msg: "'requests' is not installed as editable"
   when: not requests_editable_dir.stat.exists
-
