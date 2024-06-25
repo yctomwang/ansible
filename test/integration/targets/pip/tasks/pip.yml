@@ -668,39 +668,35 @@
   debug:
     msg: "{{ list_installed_packages.stdout_lines }}"
 
-- name: Check if 'flask' is installed as editable
-  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show flask"
-  register: flask_result
-  changed_when: false
-  failed_when: flask_result.rc != 0
+- name: Check if 'flask' is installed as editable using pip list
+  assert:
+    that:
+      - "'Flask' in list_installed_packages.stdout"
+      - "'/tmp/ansible.uul2o1wj.test/venv_editable_test/src/flask' in list_installed_packages.stdout"
 
-- name: Debug 'flask' result for editable install
-  debug:
-    msg: "{{ flask_result.stdout_lines }}"
-
-- name: Debug 'flask' result full output
-  debug:
-    var: flask_result
+- name: Verify 'flask' editable installation directory exists
+  stat:
+    path: "{{ remote_tmp_dir }}/venv_editable_test/src/flask"
+  register: flask_editable_dir
 
 - name: Fail if 'flask' is not installed as editable
   fail:
     msg: "'flask' is not installed as editable"
-  when: "'Editable project location:' not in flask_result.stdout"
+  when: not flask_editable_dir.stat.exists
 
-- name: Check if 'requests' is installed as editable
-  command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show requests"
-  register: requests_result
-  changed_when: false
-  failed_when: requests_result.rc != 0
+- name: Check if 'requests' is installed as editable using pip list
+  assert:
+    that:
+      - "'requests' in list_installed_packages.stdout"
+      - "'/tmp/ansible.uul2o1wj.test/venv_editable_test/src/requests' in list_installed_packages.stdout"
 
-- name: Debug 'requests' result for editable install
-  debug:
-    msg: "{{ requests_result.stdout_lines }}"
+- name: Verify 'requests' editable installation directory exists
+  stat:
+    path: "{{ remote_tmp_dir }}/venv_editable_test/src/requests"
+  register: requests_editable_dir
 
 - name: Fail if 'requests' is not installed as editable
   fail:
     msg: "'requests' is not installed as editable"
-  when: "'Editable project location:' not in requests_result.stdout"
-
-
+  when: not requests_editable_dir.stat.exists
 
