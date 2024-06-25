@@ -648,8 +648,8 @@
 - name: Ensure packages are installed as editable
   pip:
     name:
-      - "git+https://github.com/pallets/flask#egg=flask"
-      - "git+https://github.com/requests/requests#egg=requests"
+      - "git+https://github.com/pallets/click#egg=click"
+      - "git+https://github.com/python-pillow/Pillow#egg=Pillow"
     editable: true
     virtualenv: "{{ remote_tmp_dir }}/venv_editable_test"
   register: install_editable
@@ -668,42 +668,34 @@
   debug:
     msg: "{{ list_installed_packages.stdout_lines }}"
 
-- name: Check if 'flask' is installed as editable using pip list
+- name: Check if 'click' is installed as editable using pip list
   assert:
     that:
-      - "item.startswith('Flask') and '/src/flask' in item"
-  loop: "{{ list_installed_packages.stdout_lines }}"
+      - "'Click' in list_installed_packages.stdout"
+      - "'/tmp/ansible.7fx7ud20.test/venv_editable_test/src/click' in list_installed_packages.stdout"
 
-- name: Verify 'flask' editable installation directory exists
+- name: Verify 'click' editable installation directory exists
   stat:
-    path: "{{ item.split()[-1] }}"
-  register: flask_editable_dir
-  when: "item.startswith('Flask') and '/src/flask' in item"
-  loop: "{{ list_installed_packages.stdout_lines }}"
-  loop_control:
-    label: "{{ item.split()[-1] }}"
+    path: "{{ remote_tmp_dir }}/venv_editable_test/src/click"
+  register: click_editable_dir
 
-- name: Fail if 'flask' is not installed as editable
+- name: Fail if 'click' is not installed as editable
   fail:
-    msg: "'flask' is not installed as editable"
-  when: not flask_editable_dir.stat.exists
+    msg: "'click' is not installed as editable"
+  when: not click_editable_dir.stat.exists
 
-- name: Check if 'requests' is installed as editable using pip list
+- name: Check if 'Pillow' is installed as editable using pip list
   assert:
     that:
-      - "item.startswith('requests') and '/src/requests' in item"
-  loop: "{{ list_installed_packages.stdout_lines }}"
+      - "'Pillow' in list_installed_packages.stdout"
+      - "'/tmp/ansible.7fx7ud20.test/venv_editable_test/src/Pillow' in list_installed_packages.stdout"
 
-- name: Verify 'requests' editable installation directory exists
+- name: Verify 'Pillow' editable installation directory exists
   stat:
-    path: "{{ item.split()[-1] }}"
-  register: requests_editable_dir
-  when: "item.startswith('requests') and '/src/requests' in item"
-  loop: "{{ list_installed_packages.stdout_lines }}"
-  loop_control:
-    label: "{{ item.split()[-1] }}"
+    path: "{{ remote_tmp_dir }}/venv_editable_test/src/Pillow"
+  register: Pillow_editable_dir
 
-- name: Fail if 'requests' is not installed as editable
+- name: Fail if 'Pillow' is not installed as editable
   fail:
-    msg: "'requests' is not installed as editable"
-  when: not requests_editable_dir.stat.exists
+    msg: "'Pillow' is not installed as editable"
+  when: not Pillow_editable_dir.stat.exists
