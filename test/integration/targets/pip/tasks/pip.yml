@@ -678,6 +678,10 @@
   debug:
     msg: "{{ flask_result.stdout_lines }}"
 
+- name: Debug 'flask' result full output
+  debug:
+    var: flask_result
+
 - name: Fail if 'flask' is not installed as editable
   fail:
     msg: "'flask' is not installed as editable"
