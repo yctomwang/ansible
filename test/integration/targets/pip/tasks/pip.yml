@@ -661,18 +661,18 @@
 
 - name: List all installed packages in the virtual environment
   command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip list"
-  register: pip_list
+  register: list_installed_packages
   changed_when: false
 
 - name: Debug installed packages
   debug:
-    msg: "{{ pip_list.stdout_lines }}"
+    msg: "{{ list_installed_packages.stdout_lines }}"
 
 - name: Check if 'flask' is installed as editable
   command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show flask"
   register: flask_result
-  ignore_errors: yes
   changed_when: false
+  failed_when: flask_result.rc != 0
 
 - name: Debug 'flask' result for editable install
   debug:
@@ -681,16 +681,22 @@
 - name: Fail if 'flask' is not installed as editable
   fail:
     msg: "'flask' is not installed as editable"
-  when: flask_result.rc == 0 and 'Editable project location:' not in flask_result.stdout
+  when: "'Editable project location:' not in flask_result.stdout"
 
 - name: Check if 'requests' is installed as editable
   command: "{{ remote_tmp_dir }}/venv_editable_test/bin/pip show requests"
   register: requests_result
-  ignore_errors: yes
   changed_when: false
+  failed_when: requests_result.rc != 0
 
 - name: Debug 'requests' result for editable install
   debug:
     msg: "{{ requests_result.stdout_lines }}"
+
+- name: Fail if 'requests' is not installed as editable
+  fail:
+    msg: "'requests' is not installed as editable"
+  when: "'Editable project location:' not in requests_result.stdout"
+
 
 
