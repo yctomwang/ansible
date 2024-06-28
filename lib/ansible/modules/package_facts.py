@@ -556,10 +556,11 @@ def main():
             manager = PKG_MANAGERS[pkgmgr]()
             if manager.is_available():
                 found += 1
-                try:
-                    packages.update(manager.get_packages())
-                except Exception as e:
-                    module.warn('Failed to retrieve packages with %s: %s' % (pkgmgr, to_text(e)))
+                packages.update(manager.get_packages())
+                # try:
+                #     packages.update(manager.get_packages())
+                # except Exception as e:
+                #     module.warn('Failed to retrieve packages with %s: %s' % (pkgmgr, to_text(e)))
 
         except Exception as e:
             if pkgmgr in module.params['manager']:
