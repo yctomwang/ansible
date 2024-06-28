@@ -118,3 +118,4 @@
 
 - debug:
     var: ansible_facts.packages
+  when: ansible_os_family == "Alpine"
