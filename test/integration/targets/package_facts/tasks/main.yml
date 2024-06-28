@@ -115,7 +115,15 @@
 - name: package_facts with manager set to auto
   package_facts:
     manager: auto
+- debug:
+    var: ansible_facts.packages
 
+- name: package_facts with manager set to apk
+  package_facts:
+    manager: apk
+
+- debug:
+    var: ansible_facts.packages
 #- debug:
 #    var: ansible_facts.packages
 #  when: ansible_os_family == "Alpine"
