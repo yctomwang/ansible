@@ -111,3 +111,10 @@
         - name: restore previous flags for the selected package
           command: 'pkg set --yes -v 0 -A 0 {{ pkg_name }}'
   when: ansible_os_family == "FreeBSD"
+
+- name: package_facts with manager set to auto
+  package_facts:
+    manager: auto
+
+- debug:
+    var: ansible_facts.packages
