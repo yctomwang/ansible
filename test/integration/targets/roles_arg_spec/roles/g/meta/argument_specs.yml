@@ -1,0 +1,7 @@
+argument_specs:
+  # roles/role1/tasks/main.yml entry point
+  main:
+    options:
+      varg:
+        required: false
+        type: str

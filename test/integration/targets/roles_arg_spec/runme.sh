@@ -30,3 +30,5 @@ set -e
 # The task is tagged with 'foo' but we use 'bar' in the call below and expect
 # the validation task to run anyway since it is tagged 'always'.
 ansible-playbook test_tags.yml -i ../../inventory "$@" --tags bar | grep "a : Validating arguments against arg spec 'main' - Main entry point for role A."
+
+ansible-playbook test_82505.yml -i ../../inventory "$@" -t f -CD
