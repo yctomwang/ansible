@@ -634,4 +634,4 @@
 - assert:
     that:
       - pip_output is successful
-      - '"checkout-dir/venv" in pip_output.virtualenv'
+      - '"{{ playbook_dir }}/checkout-dir/venv" == pip_output.virtualenv'

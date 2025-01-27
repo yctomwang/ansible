@@ -1,2 +1,2 @@
 bugfixes:
-  - fix unable to find pip in the virtualenv when using relative path
+  - pip - consider the relative path for chdir is specified with virutalenv path (https://github.com/ansible/ansible/issues/81522).
